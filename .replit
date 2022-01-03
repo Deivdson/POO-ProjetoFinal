@@ -1,0 +1,2 @@
+language = "csharp"
+run = "mcs -out:main.exe 'Códigos/Paciente.cs' ; mono main.exe"
