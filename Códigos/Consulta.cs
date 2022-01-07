@@ -4,6 +4,7 @@ class Consulta{
   private string descricao{get,set};
   private string status{get,set};
   private DateTime data{get,set};
+  private DateTime[] horarios;
 
 }
 

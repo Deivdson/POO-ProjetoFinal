@@ -1,31 +1,42 @@
 using System;
 
-class Paciente{
+class Medico{
   private string nome{get};
   private string cpf{get};
   private DateTime nascimento{get};
   private int id{get};
   private Consulta[] consultas = new Consulta[10];
   private int nc;
-  
-  public Paciente(string n, string c, DateTime nasc){
-    nome = n;
-    cpf = c;
-    nascimento = nasc;
+
+  public Medico(string nome, string cpf, DateTime nascimento, int id){
+    this.nome = nome;
+    this.cpf = cpf;
+    this.nascimento = nascimento;
+    this.id = id;
   }
   public AgendarCnslt(Consulta c){
+    //p.AgendarCnslt();
     if(nc == consultas.Lenght){
       Array.Resize(ref consultas, 2*consultas.Lenght);
     }
     consultas[nc] = c;
     nc++;
   }
+
   public Consulta[] ListarConsultas(){
     Consulta[] c = new Consulta[nc];
     Array.Copy(consutlas, c, nc);
     return c;
   }
-  public override string ToString(){
-    return $"Nome: {nome}\nCPF: {cpf}\nData de Nascimento: {nascimento}";
+
+  public Consulta ListarCId(int id){
+    for(int i=0; i<nc;i++){
+      if(consultas[i].Getid()==id)return consultas[i];
+    }
+    return null;
+  }
+
+  public override string toString(){
+    retrun $"Nome: {nome}\nCPF: {cpf}\nData de nascimento: {nascimento}\nID: {id}";
   }
 }
