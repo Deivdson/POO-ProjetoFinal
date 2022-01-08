@@ -1,10 +1,10 @@
 using System;
 
 class Medico{
-  private string nome{get};
-  private string cpf{get};
-  private DateTime nascimento{get};
-  private int id{get};
+  private string nome{get;};
+  private string cpf{get;};
+  private DateTime nascimento{get;};
+  private int id{get;};
   private Consulta[] consultas = new Consulta[10];
   private int nc;
 
@@ -36,7 +36,7 @@ class Medico{
     return null;
   }
 
-  public override string toString(){
+  public override string ToString(){
     retrun $"Nome: {nome}\nCPF: {cpf}\nData de nascimento: {nascimento}\nID: {id}";
   }
 }

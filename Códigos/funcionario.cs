@@ -1,22 +1,27 @@
 using System;
 
 class Funcionario{
-  private string nome="admin"{get};
-  private int senha=0100{get};
+  private string nome{get; set;};
+  private int senha{get; set;};
   private Medico[] medicos = new Medico[10];
   private Paciente[] pacientes = new Paciente[10];
   private int nm, np;
 
+  public Funcionario(string nome, int senha){
+    this.nome = nome;
+    this.senha = senha;
+  }
+
   public InserirMed(Medico m){
     if(nm == medicos.Lenght){
-      Array.Resize( ref medicos, 2*medicos.lenght);
+      Array.Resize( ref medicos, 2*medicos.Lenght);
     }
     medicos[nm] = m;
     nm++;
   }
   public InserirPac(Paciente p){
     if(np == pacientes.Lenght){
-      Array.Resize( ref pacientes, 2*pacientes.lenght);
+      Array.Resize( ref pacientes, 2*pacientes.Lenght);
     }
     paciente[np] = p;
     np++;
@@ -34,7 +39,7 @@ class Funcionario{
   //Procurar
   public Medico ListarMedId(int id){
     for(int i=0; i<nm ;i++){
-      if(medicos[i].Getid()==id)return medicos[i];
+      if(medicos[i].id==id)return medicos[i];
     }
     return null;
   }
