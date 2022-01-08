@@ -1,12 +1,17 @@
 using System;
 
 class Medico{
-  private string nome{get;};
-  private string cpf{get;};
-  private DateTime nascimento{get;};
-  private int id{get;};
+  private string nome;
+  private string cpf;
+  private DateTime nascimento;
+  private int id;
   private Consulta[] consultas = new Consulta[10];
   private int nc;
+
+  public string Nome{get;}
+  public string Cpf{get;}
+  public DateTime Nascimento{get;}
+  public int Id{get;}
 
   public Medico(string nome, string cpf, DateTime nascimento, int id){
     this.nome = nome;
@@ -14,10 +19,10 @@ class Medico{
     this.nascimento = nascimento;
     this.id = id;
   }
-  public AgendarCnslt(Consulta c){
+  public void AgendarCnslt(Consulta c){
     //p.AgendarCnslt();
-    if(nc == consultas.Lenght){
-      Array.Resize(ref consultas, 2*consultas.Lenght);
+    if(nc == consultas.Length){
+      Array.Resize(ref consultas, 2*consultas.Length);
     }
     consultas[nc] = c;
     nc++;
@@ -25,18 +30,18 @@ class Medico{
 
   public Consulta[] ListarConsultas(){
     Consulta[] c = new Consulta[nc];
-    Array.Copy(consutlas, c, nc);
+    Array.Copy(consultas, c, nc);
     return c;
   }
 
   public Consulta ListarCId(int id){
     for(int i=0; i<nc;i++){
-      if(consultas[i].Getid()==id)return consultas[i];
+      if(consultas[i].Id==id)return consultas[i];
     }
     return null;
   }
 
   public override string ToString(){
-    retrun $"Nome: {nome}\nCPF: {cpf}\nData de nascimento: {nascimento}\nID: {id}";
+    return $"Nome: {nome}\nCPF: {cpf}\nData de nascimento: {nascimento}\nID: {id}";
   }
 }
