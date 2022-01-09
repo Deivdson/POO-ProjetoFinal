@@ -40,6 +40,12 @@ class Medico{
     }
     return null;
   }
+  
+  public void AtualizarConsulta(int id, string status, string diag){
+    Consulta consulta = ListarCId(id);
+    consulta.Status = status;
+    consulta.Diagnostico = diag;
+  }
 
   public override string ToString(){
     return $"Nome: {nome}\nCPF: {cpf}\nData de nascimento: {nascimento}\nID: {id}";

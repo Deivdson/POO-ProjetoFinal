@@ -55,4 +55,40 @@ class Funcionario{
     }
     return null;
   }
+  private int IndiceMed(Medico m){
+    for(int i=0; i<nm ;i++)
+      if(medicos[i]==m) return i;
+    return -1;
+  }
+  private int IndicePac(Paciente p){
+    for(int i=0; i<np ;i++)
+      if(pacientes[i]==p) return i;
+    return -1;
+  }
+  public void RemoverMed(Medico m){
+    int n = IndiceMed(m);
+    if(n==-1) return;
+    for(int i=n; i<nm-1 ;i++)
+      medicos[i] = medicos[i+1];
+    nm--;
+    Consulta[] consultas = m.ListarConsultas();
+    foreach(Consulta c in consultas){
+      c.Descricao = null;
+      c.Diagnostico = null;
+      c.Status = null;
+    }
+  }
+  public void RemoverPac(Paciente p){
+    int n = IndicePac(p);
+    if(n==-1) return;
+    for(int i=n; i<np-1 ;i++)
+      pacientes[i] = pacientes[i+1];
+    np--;
+    Consulta[] consultas = p.ListarConsultas();
+    foreach(Consulta c in consultas){
+      c.Descricao = null;
+      c.Diagnostico = null;
+      c.Status = null;
+    }
+  }
 }

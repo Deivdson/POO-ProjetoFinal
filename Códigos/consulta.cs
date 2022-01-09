@@ -2,12 +2,14 @@ using System;
 
 class Consulta{
   private string descricao;
+  private string diagnostico;
   private string status;
   private DateTime data;
   private int id;
   private DateTime[] horarios;
 
   public string Descricao{get; set;}
+   public string Diagnostico{get; set;}
   public string Status{get;set;}
   public DateTime Data{get;set;}
   public int Id{get;}

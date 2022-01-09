@@ -21,7 +21,7 @@ class MainClass{
         
     }while(op!=0);
 
-    Console.WriteLine("------Adios------");
+    Console.WriteLine("Adios... *barulho do windows desligando*");
 
   }
   public static int Menu(){
@@ -53,7 +53,7 @@ class MainClass{
       else return 0;
     }else{
 
-      Console.WriteLine("\n--------------------");
+      Console.WriteLine("\n-----------------------------------");
       Console.WriteLine($"Bem Vindo {f.Nome}! ");
       do{
         try{
@@ -93,14 +93,52 @@ class MainClass{
       else return 0;
     }else{
 
-      Console.WriteLine("\n--------------------");
-      Console.WriteLine($"Bem Vindo {m.Nome}! ");
+      Console.WriteLine("\n-----------------------------------");
+      Console.WriteLine($" Bem Vindo {m.Nome}! ");
       do{
         try{
           op = MenuMed();
           switch(op){
             case 1: AgendarConsultaMed(m);break;
             case 2: ConsultasMed(m);break;
+            case 3: AtualizarConsultaMed(m);break;
+          }
+        }
+        catch(Exception erro){
+          Console.WriteLine(erro.Message);
+          op = 100;
+        }  
+      }while(op!=0);
+    }
+    Console.WriteLine();
+    return op;
+  }
+
+  public static int AreaPac(){
+    int op = 0;
+    Console.WriteLine("\n--------------------");
+    Console.WriteLine("\nLogin Paciente:");
+    Console.WriteLine("\nDigite o nome de usuário:");
+    string nome = Console.ReadLine();
+    Console.WriteLine("\nDigite o cpf:");
+    int cpf = int.Parse(Console.ReadLine());
+
+    Paciente p = f.ProcurarPac(nome);
+
+    if(!(nome.Equals(p.Nome) || cpf.Equals(p.Cpf))){
+      Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
+      int i = int.Parse(Console.ReadLine());
+      if(i==1)MenuPac();
+      else return 0;
+    }else{
+      Console.WriteLine("\n-----------------------------------");
+      Console.WriteLine($" Bem Vindo {p.Nome}! ");
+      do{
+        try{
+          op = MenuPac();
+          switch(op){
+            case 1: AgendarConsultaPac(p);break;
+            case 2: ConsultasPac(p);break;
           }
         }
         catch(Exception erro){
@@ -127,7 +165,20 @@ class MainClass{
   }
 
   public static int MenuMed(){
-    Console.WriteLine("\n---------Menu do funcionário---------");
+    Console.WriteLine("\n---------Menu do Médico---------");
+    Console.WriteLine("1 - Agendar consulta");
+    Console.WriteLine("2 - Listar consultas");
+    Console.WriteLine("3 - Atualizar consulta");
+
+    Console.WriteLine("0 - Voltar");
+    Console.WriteLine("Informe uma opção: ");
+    int op = int.Parse(Console.ReadLine());
+    Console.WriteLine();
+    return op;
+  }
+  public static int MenuPac(){
+    Console.WriteLine("\n---------Menu Paciente-----------");
+    //Paciente p = new Paciente("juka", "010293", DateTime.Parse("04/04/2001"), 15);
     Console.WriteLine("1 - Agendar consulta");
     Console.WriteLine("2 - Listar consultas");
 
@@ -137,20 +188,9 @@ class MainClass{
     Console.WriteLine();
     return op;
   }
-  public static int MenuPac(){
-    Console.WriteLine("\n--------------------");
-    Paciente p = new Paciente("juka", "010293", DateTime.Parse("04/04/2001"), 15);
-    Console.WriteLine("Menu Paciente - Bem Vindo !");
-
-    Console.WriteLine("0 - Voltar");
-    Console.WriteLine("Informe uma opção: ");
-    int op = int.Parse(Console.ReadLine());
-    Console.WriteLine();
-    return op;
-  }
 
   public static void CadastrarMed(){
-    Console.WriteLine("---Cadastrar de Medico---");
+    Console.WriteLine("---Cadastro de Medico---");
     Console.WriteLine("Informe o nome:");
     string nome = Console.ReadLine();
     Console.WriteLine("Informe o cpf:");
@@ -164,7 +204,7 @@ class MainClass{
     f.InserirMed(m);
   }
   public static void CadastrarPac(){
-    Console.WriteLine("---Cadastrar de Paciente---");
+    Console.WriteLine("---Cadastro de Paciente---");
     Console.WriteLine("Informe o nome:");
     string nome = Console.ReadLine();
     Console.WriteLine("Informe o cpf:");
@@ -196,6 +236,22 @@ class MainClass{
     }
     foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n");
   }
+  public static void ExcluirMed(){
+    Console.WriteLine("-----Exclusão de Médicos-----");
+    ListarMed();
+    Console.WriteLine("Informe o médico que deseja remover");
+    string nome = Console.ReadLine();
+    Medico m = f.ProcurarMed(nome);
+    f.RemoverMed(m);
+  }
+  public static void ExcluirPac(){
+    Console.WriteLine("-----Exclusão de Pacientes-----");
+    ListarPac();
+    Console.WriteLine("Informe o paciente que deseja remover");
+    string nome = Console.ReadLine();
+    Paciente p = f.ProcurarPac(nome);
+    f.RemoverPac(p);
+  }
 
   public static void AgendarConsultaMed(Medico m){
     Console.WriteLine("\n--------Agendamento de Consulta---------");
@@ -208,8 +264,6 @@ class MainClass{
     string status = "Agendada";
     Consulta c = new Consulta(desc,status,data,id);
     m.AgendarCnslt(c);
-
-    Console.WriteLine(m);
   }
   public static void ConsultasMed(Medico m){
     Console.WriteLine("---Lista de Consultas---");
@@ -219,6 +273,39 @@ class MainClass{
       return;
     }
     foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
+  }
+
+  public static void AgendarConsultaPac(Paciente p){
+    Console.WriteLine("\n--------Agendamento de Consulta---------");
+    Console.WriteLine("Informe uma descrição:");
+    string desc = Console.ReadLine();
+    Console.WriteLine("Informe um ID:");
+    int id = int.Parse(Console.ReadLine());
+    Console.WriteLine("Selecione uma Data:");
+    DateTime data = DateTime.Parse(Console.ReadLine());
+    string status = "Agendada";
+    Consulta c = new Consulta(desc,status,data,id);
+    p.AgendarCnslt(c);
+  }
+  public static void ConsultasPac(Paciente p){
+    Console.WriteLine("---Lista de Consultas---");
+    Consulta[] consultas = p.ListarConsultas();
+    if(consultas.Length == 0){
+      Console.WriteLine("Nenhuma consulta agendada.");
+      return;
+    }
+    foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
+  }
+  public static void AtualizarConsultaMed(Medico m){
+    Console.WriteLine("\n-------Atualizar Consulta-------");
+    Console.WriteLine("Informe o ID da consulta:");
+    int id = int.Parse(Console.ReadLine());
+    Console.WriteLine("Informe o status atual da consulta:");
+    string status = Console.ReadLine();
+    Console.WriteLine("Informe o diagnóstico:");
+    string diag = Console.ReadLine();
+
+    m.AtualizarConsulta(id,status,diag);
   }
 }
 
