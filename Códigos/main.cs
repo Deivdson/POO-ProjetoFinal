@@ -37,10 +37,25 @@ class MainClass{
   }
 
   public static int MenuFunc(){
-    Console.WriteLine("\n--------------------");
     Funcionario f = new Funcionario("admin", 0100);
-    Console.WriteLine($"Menu Funcionário - Bem Vindo {f.Nome}! ");
-    
+    Console.WriteLine("\n--------------------");
+    Console.WriteLine("\nLogin Funcionário:");
+    Console.WriteLine("\nDigite o nome de usuário:");
+    string nome = Console.ReadLine();
+    Console.WriteLine("\nDigite a senha:");
+    int senha = int.Parse(Console.ReadLine());
+
+    if(nome != f.Nome || senha != f.Senha){
+      Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
+      int i = int.Parse(Console.ReadLine());
+      if(i==1)MenuFunc();
+      else return 0;
+    }else{
+
+      Console.WriteLine("\n--------------------");
+      Console.WriteLine($"Menu Funcionário - Bem Vindo {f.Nome}! ");
+      
+    }
     Console.WriteLine("0 - Voltar");
     Console.WriteLine("Informe uma opção: ");
     int op = int.Parse(Console.ReadLine());
