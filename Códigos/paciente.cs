@@ -13,7 +13,7 @@ class Paciente{
   public DateTime Nascimento{get;}
   public int Id{get;}
   
-  public Paciente(string nome, string cpf, DateTime nascimento){
+  public Paciente(string nome, string cpf, DateTime nascimento, int id){
     this.nome = nome;
     this.cpf = cpf;
     this.nascimento = nascimento;

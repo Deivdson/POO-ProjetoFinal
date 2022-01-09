@@ -8,10 +8,10 @@ class Medico{
   private Consulta[] consultas = new Consulta[10];
   private int nc;
 
-  public string Nome{get;}
-  public string Cpf{get;}
-  public DateTime Nascimento{get;}
-  public int Id{get;}
+  public string Nome{get => nome;}
+  public string Cpf{get => cpf;}
+  public DateTime Nascimento{get => nascimento;}
+  public int Id{get => id;}
 
   public Medico(string nome, string cpf, DateTime nascimento, int id){
     this.nome = nome;

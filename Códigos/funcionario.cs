@@ -10,6 +10,8 @@ class Funcionario{
   public string Nome{get => nome; set => nome = value;}
   public int Senha{get => senha; set => senha = value;}
 
+  public Funcionario(){}
+
   public Funcionario(string nome, int senha){
     this.nome = nome;
     this.senha = senha;
@@ -40,16 +42,16 @@ class Funcionario{
     return p;
   }
   //Procurar
-  public Medico ListarMedId(int id){
+  public Medico ProcurarMed(string nome){
     for(int i=0; i<nm ;i++){
-      if(medicos[i].Id==id)return medicos[i];
+      if(medicos[i].Nome==nome)return medicos[i];
     }
     return null;
   }
   //Procurar
-  public Paciente ListarPacId(int id){
+  public Paciente ProcurarPac(string nome){
     for (int i=0; i<np ;i++){
-      if(pacientes[i].Id==id)return pacientes[i];
+      if(pacientes[i].Nome==nome)return pacientes[i];
     }
     return null;
   }
