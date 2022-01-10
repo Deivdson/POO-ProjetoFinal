@@ -8,9 +8,9 @@ class Paciente{
   private Consulta[] consultas = new Consulta[10];
   private int nc;
 
-  public string Nome{get=>nome;}
-  public string Cpf{get=>cpf;}
-  public DateTime Nascimento{get=>nascimento;}
+  public string Nome{get=>nome;set=>nome=value;}
+  public string Cpf{get=>cpf;set=>cpf=value;}
+  public DateTime Nascimento{get=>nascimento;set=>nascimento=value;}
   public int Id{get=>id;}
   
   public Paciente(string nome, string cpf, DateTime nascimento, int id){

@@ -48,10 +48,24 @@ class Funcionario{
     }
     return null;
   }
+  //Procurar id
+  public Medico ProcurarMedID(int id){
+    for(int i=0; i<nm ;i++){
+      if(medicos[i].Id==id)return medicos[i];
+    }
+    return null;
+  }
   //Procurar
   public Paciente ProcurarPac(string nome){
     for (int i=0; i<np ;i++){
       if(pacientes[i].Nome==nome)return pacientes[i];
+    }
+    return null;
+  }
+  //Procurar id
+  public Paciente ProcurarPacID(int id){
+    for (int i=0; i<np ;i++){
+      if(pacientes[i].Id==id)return pacientes[i];
     }
     return null;
   }
@@ -90,5 +104,18 @@ class Funcionario{
       c.Diagnostico = null;
       c.Status = null;
     }
+  }
+  public void AtualizarMed(Medico m){
+    Medico medico = ProcurarMedID(m.Id);
+    medico.Nome = m.Nome;
+    medico.Cpf = m.Cpf;
+    medico.Nascimento = m.Nascimento;
+  }
+
+  public void AtualizarPac(Paciente p){
+    Paciente paciente = ProcurarPacID(p.Id);
+    paciente.Nome = p.Nome;
+    paciente.Cpf = p.Cpf;
+    paciente.Nascimento = p.Nascimento;
   }
 }

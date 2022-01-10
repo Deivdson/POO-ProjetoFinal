@@ -64,10 +64,12 @@ class MainClass{
             case 2: CadastrarPac();break;
             case 3: ListarMed();break;
             case 4: ListarPac();break;
-            case 5: RemoverMed();break;
-            case 6: RemoverPac();break;
-            case 7: AddHorario();break;
-            case 8: Horarios();break;
+            case 5: EditarMed();break;
+            case 6: EditarPac();break;
+            case 7: RemoverMed();break;
+            case 8: RemoverPac();break;
+            case 9: AddHorario();break;
+            case 10: Horarios();break;
           }
         }
         catch(Exception erro){
@@ -173,10 +175,12 @@ class MainClass{
     Console.WriteLine("2 - Cadastrar paciente");
     Console.WriteLine("3 - Listar médico");
     Console.WriteLine("4 - Listar paciente");
-    Console.WriteLine("5 - Remover médico");
-    Console.WriteLine("6 - Remover paciente");
-    Console.WriteLine("7 - Adicionar horário");
-    Console.WriteLine("8 - Listar horários");
+    Console.WriteLine("5 - Editar médico");
+    Console.WriteLine("6 - Editar paciente");
+    Console.WriteLine("7 - Remover médico");
+    Console.WriteLine("8 - Remover paciente");
+    Console.WriteLine("9 - Adicionar horário");
+    Console.WriteLine("10 - Listar horários");
     Console.WriteLine("0 - Sair");
     Console.WriteLine("Informe uma opção: ");
     int op = int.Parse(Console.ReadLine());
@@ -254,6 +258,32 @@ class MainClass{
       return;
     }
     foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n");
+  }
+  public static void EditarMed(){
+    Console.WriteLine("\n-------Editar Médico-------");
+    Console.WriteLine("Informe o ID do médico:");
+    int id = int.Parse(Console.ReadLine());
+    Console.WriteLine("Informe um novo nome:");
+    string nome = Console.ReadLine();
+    Console.WriteLine("Informe um novo cpf:");
+    string cpf = Console.ReadLine();
+    Console.WriteLine("Informe uma nova data de nascimento:");
+    DateTime data = DateTime.Parse(Console.ReadLine());
+    Medico m = new Medico(nome,cpf,data,id);
+    f.AtualizarMed(m);
+  }
+  public static void EditarPac(){
+    Console.WriteLine("\n-------Editar Paciente-------");
+    Console.WriteLine("Informe o ID do paciente:");
+    int id = int.Parse(Console.ReadLine());
+    Console.WriteLine("Informe um novo nome:");
+    string nome = Console.ReadLine();
+    Console.WriteLine("Informe um novo cpf:");
+    string cpf = Console.ReadLine();
+    Console.WriteLine("Informe uma nova data de nascimento:");
+    DateTime data = DateTime.Parse(Console.ReadLine());
+    Paciente p = new Paciente(nome,cpf,data,id);
+    f.AtualizarPac(p);
   }
   public static void RemoverMed(){
     Console.WriteLine("-----Exclusão de Médicos-----");
