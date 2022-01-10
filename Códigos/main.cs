@@ -38,8 +38,7 @@ class MainClass{
     return op;
   }
 
-  public static int AreaFunc(){
-    Consulta c = new Consulta();
+  public static void AreaFunc(){
     int op = 0;
     Console.WriteLine("\n--------------------");
     Console.WriteLine("\nLogin Funcionário:");
@@ -52,7 +51,7 @@ class MainClass{
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
       int i = int.Parse(Console.ReadLine());
       if(i==1)AreaFunc();
-      else return 0;
+      else return;
     }else{
 
       Console.WriteLine("\n-----------------------------------");
@@ -67,8 +66,8 @@ class MainClass{
             case 4: ListarPac();break;
             case 5: RemoverMed();break;
             case 6: RemoverPac();break;
-            case 7: AddHorario(c);break;
-            case 8: Horarios(c);break;
+            case 7: AddHorario();break;
+            case 8: Horarios();break;
           }
         }
         catch(Exception erro){
@@ -78,17 +77,16 @@ class MainClass{
       }while(op!=0);
     }
     Console.WriteLine();
-    return op;
   }
 
-  public static int AreaMed(){
+  public static void AreaMed(){
     int op = 0;
     Console.WriteLine("\n--------------------");
     //Verifica se existem médicos
     Medico[] medicos = f.ListarMed();
     if(medicos.Length == 0){
       Console.WriteLine("Nenhum médico cadastrado.");
-      return op;
+      return;
     }
     //-------------------------------------------------
     Console.WriteLine("\nLogin Médico:");
@@ -103,7 +101,7 @@ class MainClass{
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
       int i = int.Parse(Console.ReadLine());
       if(i==1)AreaMed();
-      else return 0;
+      else return;
     }else{
 
       Console.WriteLine("\n-----------------------------------");
@@ -124,17 +122,16 @@ class MainClass{
       }while(op!=0);
     }
     Console.WriteLine();
-    return op;
   }
 
-  public static int AreaPac(){
+  public static void AreaPac(){
     int op = 0;
     Console.WriteLine("\n--------------------");
     //Verifica se existem pacientes.
     Paciente[] pacientes = f.ListarPac();
     if(pacientes.Length == 0){
       Console.WriteLine("Nenhum paciente cadastrado.");
-      return op;
+      return;
     }
     //---------------------------------------------------
     Console.WriteLine("\nLogin Paciente:");
@@ -149,7 +146,7 @@ class MainClass{
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
       int i = int.Parse(Console.ReadLine());
       if(i==1)AreaPac();
-      else return 0;
+      else return;
     }else{
       Console.WriteLine("\n-----------------------------------");
       Console.WriteLine($" Bem Vindo {p.Nome}! ");
@@ -168,7 +165,6 @@ class MainClass{
       }while(op!=0);
     }
     Console.WriteLine();
-    return op;
   }
 
   public static int MenuFunc(){
@@ -297,7 +293,7 @@ class MainClass{
     Console.WriteLine("Informe um ID:");
     int id = int.Parse(Console.ReadLine());
     Console.WriteLine("Selecione uma Data:");
-    Horarios(cnslt);
+    Horarios();
     int index = int.Parse(Console.ReadLine());
     DateTime data = cnslt.BuscaH(index);
     string status = "Agendada";
@@ -321,7 +317,7 @@ class MainClass{
     Console.WriteLine("Informe um ID:");
     int id = int.Parse(Console.ReadLine());
     Console.WriteLine("Selecione uma Data:");
-    Horarios(cnslt);
+    Horarios();
     int index = int.Parse(Console.ReadLine());
     DateTime data = cnslt.BuscaH(index);
     string status = "Agendada";
@@ -349,13 +345,13 @@ class MainClass{
 
     m.AtualizarConsulta(id,status,diag);
   }
-  public static void AddHorario(Consulta c){
+  public static void AddHorario(){
     Console.WriteLine("\n-----Adição de Horários-----");
     Console.WriteLine("Informe um novo horário:");
     DateTime h = DateTime.Parse(Console.ReadLine());
     cnslt.AdicionarH(h);
   }
-  public static void Horarios(Consulta c){
+  public static void Horarios(){
     Console.WriteLine("---Lista de Horários---");
     DateTime[] horarios = cnslt.Horarios();
     if(horarios.Length == 0){
