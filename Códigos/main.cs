@@ -2,6 +2,7 @@ using System;
 
 class MainClass{
   private static Funcionario f = new Funcionario("admin", 0100);
+  private static Consulta cnslt = new Consulta();
   public static void Main(){
     int op = 0;
     Console.WriteLine("---Sistema de Gerenciamento de Consultass---");
@@ -11,7 +12,7 @@ class MainClass{
         switch(op){
           case 1: AreaFunc();break;
           case 2: AreaMed();break;
-          case 3: MenuPac();break;
+          case 3: AreaPac();break;
         }
       }
       catch(Exception erro){
@@ -38,6 +39,7 @@ class MainClass{
   }
 
   public static int AreaFunc(){
+    Consulta c = new Consulta();
     int op = 0;
     Console.WriteLine("\n--------------------");
     Console.WriteLine("\nLogin Funcionário:");
@@ -49,7 +51,7 @@ class MainClass{
     if(nome != f.Nome || senha != f.Senha){
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
       int i = int.Parse(Console.ReadLine());
-      if(i==1)MenuFunc();
+      if(i==1)AreaFunc();
       else return 0;
     }else{
 
@@ -63,6 +65,10 @@ class MainClass{
             case 2: CadastrarPac();break;
             case 3: ListarMed();break;
             case 4: ListarPac();break;
+            case 5: RemoverMed();break;
+            case 6: RemoverPac();break;
+            case 7: AddHorario(c);break;
+            case 8: Horarios(c);break;
           }
         }
         catch(Exception erro){
@@ -78,6 +84,13 @@ class MainClass{
   public static int AreaMed(){
     int op = 0;
     Console.WriteLine("\n--------------------");
+    //Verifica se existem médicos
+    Medico[] medicos = f.ListarMed();
+    if(medicos.Length == 0){
+      Console.WriteLine("Nenhum médico cadastrado.");
+      return op;
+    }
+    //-------------------------------------------------
     Console.WriteLine("\nLogin Médico:");
     Console.WriteLine("\nDigite o nome de usuário:");
     string nome = Console.ReadLine();
@@ -89,7 +102,7 @@ class MainClass{
     if(!(nome.Equals(m.Nome) || cpf.Equals(m.Cpf))){
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
       int i = int.Parse(Console.ReadLine());
-      if(i==1)MenuMed();
+      if(i==1)AreaMed();
       else return 0;
     }else{
 
@@ -117,6 +130,13 @@ class MainClass{
   public static int AreaPac(){
     int op = 0;
     Console.WriteLine("\n--------------------");
+    //Verifica se existem pacientes.
+    Paciente[] pacientes = f.ListarPac();
+    if(pacientes.Length == 0){
+      Console.WriteLine("Nenhum paciente cadastrado.");
+      return op;
+    }
+    //---------------------------------------------------
     Console.WriteLine("\nLogin Paciente:");
     Console.WriteLine("\nDigite o nome de usuário:");
     string nome = Console.ReadLine();
@@ -128,7 +148,7 @@ class MainClass{
     if(!(nome.Equals(p.Nome) || cpf.Equals(p.Cpf))){
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
       int i = int.Parse(Console.ReadLine());
-      if(i==1)MenuPac();
+      if(i==1)AreaPac();
       else return 0;
     }else{
       Console.WriteLine("\n-----------------------------------");
@@ -157,6 +177,10 @@ class MainClass{
     Console.WriteLine("2 - Cadastrar paciente");
     Console.WriteLine("3 - Listar médico");
     Console.WriteLine("4 - Listar paciente");
+    Console.WriteLine("5 - Remover médico");
+    Console.WriteLine("6 - Remover paciente");
+    Console.WriteLine("7 - Adicionar horário");
+    Console.WriteLine("8 - Listar horários");
     Console.WriteLine("0 - Sair");
     Console.WriteLine("Informe uma opção: ");
     int op = int.Parse(Console.ReadLine());
@@ -178,7 +202,6 @@ class MainClass{
   }
   public static int MenuPac(){
     Console.WriteLine("\n---------Menu Paciente-----------");
-    //Paciente p = new Paciente("juka", "010293", DateTime.Parse("04/04/2001"), 15);
     Console.WriteLine("1 - Agendar consulta");
     Console.WriteLine("2 - Listar consultas");
 
@@ -236,16 +259,30 @@ class MainClass{
     }
     foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n");
   }
-  public static void ExcluirMed(){
+  public static void RemoverMed(){
     Console.WriteLine("-----Exclusão de Médicos-----");
+    //Verifica se existem médicos
+    Medico[] medicos = f.ListarMed();
+    if(medicos.Length == 0){
+      Console.WriteLine("Nenhum médico cadastrado.");
+      return;
+    }
+    //-------------------------------------------------
     ListarMed();
     Console.WriteLine("Informe o médico que deseja remover");
     string nome = Console.ReadLine();
     Medico m = f.ProcurarMed(nome);
     f.RemoverMed(m);
   }
-  public static void ExcluirPac(){
+  public static void RemoverPac(){
     Console.WriteLine("-----Exclusão de Pacientes-----");
+    //Verifica se existem pacientes.
+    Paciente[] pacientes = f.ListarPac();
+    if(pacientes.Length == 0){
+      Console.WriteLine("Nenhum paciente cadastrado.");
+      return;
+    }
+    //---------------------------------------------------
     ListarPac();
     Console.WriteLine("Informe o paciente que deseja remover");
     string nome = Console.ReadLine();
@@ -260,7 +297,9 @@ class MainClass{
     Console.WriteLine("Informe um ID:");
     int id = int.Parse(Console.ReadLine());
     Console.WriteLine("Selecione uma Data:");
-    DateTime data = DateTime.Parse(Console.ReadLine());
+    Horarios(cnslt);
+    int index = int.Parse(Console.ReadLine());
+    DateTime data = cnslt.BuscaH(index);
     string status = "Agendada";
     Consulta c = new Consulta(desc,status,data,id);
     m.AgendarCnslt(c);
@@ -282,8 +321,11 @@ class MainClass{
     Console.WriteLine("Informe um ID:");
     int id = int.Parse(Console.ReadLine());
     Console.WriteLine("Selecione uma Data:");
-    DateTime data = DateTime.Parse(Console.ReadLine());
+    Horarios(cnslt);
+    int index = int.Parse(Console.ReadLine());
+    DateTime data = cnslt.BuscaH(index);
     string status = "Agendada";
+
     Consulta c = new Consulta(desc,status,data,id);
     p.AgendarCnslt(c);
   }
@@ -306,6 +348,26 @@ class MainClass{
     string diag = Console.ReadLine();
 
     m.AtualizarConsulta(id,status,diag);
+  }
+  public static void AddHorario(Consulta c){
+    Console.WriteLine("\n-----Adição de Horários-----");
+    Console.WriteLine("Informe um novo horário:");
+    DateTime h = DateTime.Parse(Console.ReadLine());
+    cnslt.AdicionarH(h);
+  }
+  public static void Horarios(Consulta c){
+    Console.WriteLine("---Lista de Horários---");
+    DateTime[] horarios = cnslt.Horarios();
+    if(horarios.Length == 0){
+      Console.WriteLine("Nenhum horário disponível.");
+      return;
+    }
+    int cont=1;
+    foreach(DateTime h in horarios){
+      Console.WriteLine($"{cont} - {h} ({h.DayOfWeek})\n");
+      cont++;
+    }
+    
   }
 }
 
