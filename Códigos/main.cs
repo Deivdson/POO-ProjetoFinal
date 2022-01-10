@@ -296,9 +296,15 @@ class MainClass{
     Horarios();
     int index = int.Parse(Console.ReadLine());
     DateTime data = cnslt.BuscaH(index);
+
+    Console.WriteLine("Selecione um paciente:");
+    PacientesOP();
+    string paciente = Console.ReadLine();
+    Paciente p = f.ProcurarPac(paciente);
     string status = "Agendada";
-    Consulta c = new Consulta(desc,status,data,id);
+    Consulta c = new Consulta(m.Nome,paciente,desc,status,data,id);
     m.AgendarCnslt(c);
+    p.AgendarCnslt(c);
   }
   public static void ConsultasMed(Medico m){
     Console.WriteLine("---Lista de Consultas---");
@@ -320,10 +326,16 @@ class MainClass{
     Horarios();
     int index = int.Parse(Console.ReadLine());
     DateTime data = cnslt.BuscaH(index);
+
+    Console.WriteLine("Selecione um médico:");
+    MedicosOP();
+    string medico = Console.ReadLine();
+    Medico m = f.ProcurarMed(medico);
     string status = "Agendada";
 
-    Consulta c = new Consulta(desc,status,data,id);
+    Consulta c = new Consulta(medico,p.Nome,desc,status,data,id);
     p.AgendarCnslt(c);
+    m.AgendarCnslt(c);
   }
   public static void ConsultasPac(Paciente p){
     Console.WriteLine("---Lista de Consultas---");
@@ -363,7 +375,28 @@ class MainClass{
       Console.WriteLine($"{cont} - {h} ({h.DayOfWeek})\n");
       cont++;
     }
-    
+  }
+  public static void MedicosOP(){
+    Console.WriteLine("---Lista de Médicos---");
+    Medico[] medicos = f.ListarMed();
+    if(medicos.Length == 0){
+      Console.WriteLine("Nenhum médico disponível.");
+      return;
+    }
+    foreach(Medico m in medicos){
+      Console.WriteLine($"{m.Nome}\n");
+    }    
+  }
+  public static void PacientesOP(){
+    Console.WriteLine("---Lista de Paciente---");
+    Paciente[] pacientes = f.ListarPac();
+    if(pacientes.Length == 0){
+      Console.WriteLine("Nenhum paciente disponível.");
+      return;
+    }
+    foreach(Paciente p in pacientes){
+      Console.WriteLine($"{p.Nome}\n");
+    }    
   }
 }
 
