@@ -9,8 +9,6 @@ class Funcionario{
   private List<Paciente> pacs = new List<Paciente>();
   private List<Medico> meds = new List<Medico>();
 
-
-
   public string Nome{get => nome; set => nome = value;}
   public int Senha{get => senha; set => senha = value;}
 
@@ -22,20 +20,17 @@ class Funcionario{
   }
 
   public void InserirMed(Medico m){
-    /*if(nm == medicos.Length){
-      Array.Resize( ref medicos, 2*medicos.Length);
-    }
-    medicos[nm] = m;
-    nm++;*/
+    int max=0;
+    foreach(Medico obj in meds)
+      if(obj.Id>max)max=obj.Id;
+    m.Id=max+1;
     meds.Add(m);
   }
   public void InserirPac(Paciente p){
-    /*if(np == pacientes.Length){
-      Array.Resize( ref pacientes, 2*pacientes.Length);
-    }
-    pacientes[np] = p;
-    np++;
-    */
+    int max=0;
+    foreach(Paciente obj in pacs)
+      if(obj.Id>max)max=obj.Id;
+    p.Id=max+1;
     pacs.Add(p);
   }
   public List<Medico> ListarMed(){
@@ -92,7 +87,7 @@ class Funcionario{
   }*/
   public void RemoverMed(Medico m){
     meds.RemoveAt(meds.IndexOf(m));
-    Consulta[] consultas = m.ListarConsultas();
+    List<Consulta> consultas = m.ListarConsultas();
     foreach(Consulta c in consultas){
       c.Descricao = null;
       c.Diagnostico = null;

@@ -1,51 +1,57 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
-class Consulta{
+class Consulta : IComparable<Consulta>{
   private string medico, paciente;
   private string descricao;
   private string diagnostico;
   private string status;
   private DateTime data;
   private int id;
-  private DateTime[] horarios = new DateTime[10];
-  private int nh;
+  private List<DateTime> horarios = new List<DateTime>();
+  
 
-  public string Medico{get=>medico;}
+  public string Medico{get=>medico;set=>medico=value;}
   public string Paciente{get=>paciente;}
   public string Descricao{get=>descricao; set=>descricao=value;}
   public string Diagnostico{get=>diagnostico; set=>diagnostico=value;}
   public string Status{get=>status;set=>status=value;}
   public DateTime Data{get=>data;set=>data=value;}
-  public int Id{get=>id;}
+  public int Id{get=>id; set=>id=value;}
 
   public Consulta(){}
 
-  public Consulta(string medico, string paciente,string descricao, string status, DateTime data, int id){
-    this.medico = medico;
+  public Consulta(string paciente,string descricao, string status){
+    this.paciente = paciente;
+    this.descricao = descricao;
+    this.status = status;
+  }
+
+  public Consulta(string paciente,string descricao, string status, DateTime data){
     this.paciente = paciente;
     this.descricao = descricao;
     this.status = status;
     this.data = data;
-    this.id = id;
   }
   public void AdicionarH(DateTime horario){
-    if(nh==horarios.Length){
-      Array.Resize(ref horarios, 2*horarios.Length);
-    }
-    horarios[nh] = horario;
-    nh++;
+    horarios.Add(horario);
   }
-  public DateTime[] Horarios(){
-    DateTime[] h = new DateTime[nh];
-    Array.Copy(horarios, h, nh);
-    return h;
+  public List<DateTime> Horarios(){
+    horarios.Sort();
+    return horarios;
   }
   public DateTime BuscaH(int index){
-    for(int i=1; i<nh;i++){
+    for(int i=1; i<horarios.Count;i++){
       if(i==index)return horarios[i];
     }
     return horarios[0];
   }
+
+  public int CompareTo(Consulta obj){
+    return this.id.CompareTo(obj.Id);
+  }
+  
   public override string ToString(){
     return $"ID: {id}\nMédico responsável: {medico}\nPaciente: {paciente}\nStatus: {status}\nDescrição: {descricao}\nDiagnóstico: {diagnostico}\nData da Consulta: {data}";
   }

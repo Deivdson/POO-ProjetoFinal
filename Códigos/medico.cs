@@ -13,16 +13,19 @@ class Medico : IComparable<Medico>{
   public string Nome{get => nome;set=>nome=value;}
   public string Cpf{get => cpf;set=>cpf=value;}
   public DateTime Nascimento{get => nascimento;set=>nascimento=value;}
-  public int Id{get => id;}
+  public int Id{get => id;set=>id=value;}
 
-  public Medico(string nome, string cpf, DateTime nascimento, int id){
+  public Medico(string nome, string cpf, DateTime nascimento){
     this.nome = nome;
     this.cpf = cpf;
     this.nascimento = nascimento;
-    this.id = id;
   }
   public void AgendarCnslt(Consulta c){
     //p.AgendarCnslt();
+    int max=0;
+    foreach(Consulta obj in consultas)
+      if(obj.Id>max)max=obj.Id;
+    c.Id=max+1;
     consultas.Add(c);
   }
 
