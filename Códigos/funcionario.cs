@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-class Funcionario{
+class Funcionario : IComparable<Funcionario>{
   private string nome;
   private int senha;
+  private int id;
   private List<Paciente> pacs = new List<Paciente>();
   private List<Medico> meds = new List<Medico>();
 
   public string Nome{get => nome; set => nome = value;}
   public int Senha{get => senha; set => senha = value;}
+  public int Id{get=>id;set=>id=value;}
 
   public Funcionario(){}
 
@@ -34,16 +36,10 @@ class Funcionario{
     pacs.Add(p);
   }
   public List<Medico> ListarMed(){
-    /*Medico[] m = new Medico[nm];
-    Array.Copy(medicos, m, nm);
-    Array.Sort(m);*/
     meds.Sort();
     return meds;
   }
   public List<Paciente> ListarPac(){
-    /*Paciente[] p = new Paciente[np];
-    Array.Copy(pacientes, p, np);
-    */
     pacs.Sort();
     return pacs;
   }
@@ -75,16 +71,6 @@ class Funcionario{
     }
     return null;
   }
-  /*private int IndiceMed(Medico m){
-    for(int i=0; i<meds.Count ;i++)
-      if(meds[i]==m) return i;
-    return -1;
-  }
-  private int IndicePac(Paciente p){
-    for(int i=0; i<pacs.Count ;i++)
-      if(pacs[i]==p) return i;
-    return -1;
-  }*/
   public void RemoverMed(Medico m){
     meds.RemoveAt(meds.IndexOf(m));
     List<Consulta> consultas = m.ListarConsultas();
@@ -116,5 +102,8 @@ class Funcionario{
     paciente.Nome = p.Nome;
     paciente.Cpf = p.Cpf;
     paciente.Nascimento = p.Nascimento;
+  }
+  public int CompareTo(Funcionario obj){
+    return this.nome.CompareTo(obj.Nome);
   }
 }

@@ -6,6 +6,7 @@ using System.Threading;
 
 class MainClass{
   private static Funcionario f = new Funcionario("admin", 0100);
+  private static NFuncionario NF = new NFuncionario();
   private static Consulta cnslt = new Consulta();
   public static void Main(){
     Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
@@ -76,6 +77,10 @@ class MainClass{
             case 9: AddHorario();break;
             case 10: Horarios();break;
             case 11: AtualizarConsultaPac();break;
+            case 12: CadastrarFunc();break;
+            case 13: ListarFunc();break;
+            case 14: EditarFunc();break;
+            case 15: RemoverFunc();break;
           }
         }
         catch(Exception erro){
@@ -176,18 +181,17 @@ class MainClass{
   }
 
   public static int MenuFunc(){
-    Console.WriteLine("\n---------Menu do funcionário---------");
-    Console.WriteLine("1 - Cadastrar médico");
-    Console.WriteLine("2 - Cadastrar paciente");
-    Console.WriteLine("3 - Listar médico");
-    Console.WriteLine("4 - Listar paciente");
-    Console.WriteLine("5 - Editar médico");
-    Console.WriteLine("6 - Editar paciente");
-    Console.WriteLine("7 - Remover médico");
-    Console.WriteLine("8 - Remover paciente");
-    Console.WriteLine("9 - Adicionar horário");
-    Console.WriteLine("10 - Listar horários");
+    Console.WriteLine("\n------------Menu do funcionário-------------");
+    Console.WriteLine("1 - Cadastrar médico       2 - Cadastrar paciente    ");
+    Console.WriteLine("3 - Listar médico          4 - Listar paciente");
+    Console.WriteLine("5 - Editar médico          6 - Editar paciente");
+    Console.WriteLine("7 - Remover médico         8 - Remover paciente");
+    Console.WriteLine("9 - Adicionar horário      10 - Listar horários");
     Console.WriteLine("11 - Gerenciar Consultas");
+    Console.WriteLine("\n------------------------\n");
+    Console.WriteLine("12 - Cadastrar novo funcionário | 13 - Listar funcionários");
+    Console.WriteLine("14 - Atualizar funcionário      | 15 - Remover funcionário");
+    Console.WriteLine("----------------------------------------------");
     Console.WriteLine("0 - Sair");
     Console.WriteLine("Informe uma opção: ");
     int op = int.Parse(Console.ReadLine());
@@ -244,6 +248,19 @@ class MainClass{
     f.InserirPac(p);
 
   }
+  public static void CadastrarFunc(){
+    Console.WriteLine("---Cadastro de Funcionarios---");
+    Console.WriteLine("Informe o nome:");
+    string nome = Console.ReadLine();
+    Console.WriteLine("Informe a senha:");
+    int senha = int.Parse(Console.ReadLine());
+
+    Funcionario func = new Funcionario(nome, senha);
+    NF.InserirFunc(func);
+
+  }
+
+
   public static void ListarMed(){
     Console.WriteLine("---Lista de Médicos---");
     List<Medico> medicos = f.ListarMed();
@@ -262,6 +279,18 @@ class MainClass{
     }
     foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n");
   }
+  public static void ListarFunc(){
+    Console.WriteLine("---Lista de Funcionários---");
+    List<Funcionario> funcionarios = NF.ListarFunc();
+    if(funcionarios.Count == 0){
+      Console.WriteLine("Nenhum funcionário cadastrado.");
+      return;
+    }
+    foreach(Funcionario func in funcionarios) Console.WriteLine($"{func.Nome}\n");
+  }
+
+
+
   public static void EditarMed(){
     Console.WriteLine("\n-------Editar Médico-------");
     //Verifica se existem médicos
@@ -298,6 +327,25 @@ class MainClass{
     Paciente p = new Paciente(nome,cpf,data);
     f.AtualizarPac(p);
   }
+  public static void EditarFunc(){
+    Console.WriteLine("\n-------Editar Paciente-------");
+    //Verifica se existem pacientes.
+    List<Funcionario> funcionarios = NF.ListarFunc();
+    if(funcionarios.Count == 0){
+      Console.WriteLine("Nenhum funcionário cadastrado.");
+      return;
+    }
+    //---------------------------------------------------
+    Console.WriteLine("Informe um novo nome:");
+    string nome = Console.ReadLine();
+    Console.WriteLine("Informe uma nova senha:");
+    int senha = int.Parse(Console.ReadLine());
+    Funcionario f = new Funcionario(nome, senha);
+    NF.AtualizarFunc(f);
+  }
+
+
+
   public static void RemoverMed(){
     Console.WriteLine("-----Exclusão de Médicos-----");
     //Verifica se existem médicos
@@ -328,6 +376,23 @@ class MainClass{
     Paciente p = f.ProcurarPac(nome);
     f.RemoverPac(p);
   }
+  public static void RemoverFunc(){
+    Console.WriteLine("-----Exclusão de Funcionários-----");
+    //Verifica se existem funcionarios.
+    List<Funcionario> funcionarios = NF.ListarFunc();
+    if(funcionarios.Count == 0){
+      Console.WriteLine("Nenhum funcionário cadastrado.");
+      return;
+    }
+    //---------------------------------------------------
+    ListarFunc();
+    Console.WriteLine("Informe o funcionário que deseja remover");
+    string nome = Console.ReadLine();
+    Funcionario f = NF.ProcurarFunc(nome);
+    NF.RemoverFunc(f);
+  }
+
+
 
   public static void AgendarConsultaMed(Medico m){
     Console.WriteLine("\n--------Agendamento de Consulta---------");
@@ -357,6 +422,7 @@ class MainClass{
     foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
   }
 
+
   public static void AgendarConsultaPac(Paciente p){
     Console.WriteLine("\n--------Agendamento de Consulta---------");
     Console.WriteLine("O que está sentindo:");
@@ -376,6 +442,8 @@ class MainClass{
     }
     foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
   }
+
+
   public static void AtualizarConsultaMed(Medico m){
     Console.WriteLine("\n-------Atualizar Consulta-------");
     //Verifica se existem consultas.
@@ -394,7 +462,6 @@ class MainClass{
 
     m.AtualizarConsulta(id,status,diag);
   }
-
   public static void AtualizarConsultaPac(){
     Console.WriteLine("\n-------Gerenciamento de Consultas-------");
     //Verifica se existem paciente.
@@ -444,6 +511,9 @@ class MainClass{
 
     paciente.AtualizarConsulta(id,medico,data,status);
   }
+
+
+
   public static void AddHorario(){
     Console.WriteLine("\n-----Adição de Horários-----");
     Console.WriteLine("Informe um novo horário:");
@@ -463,6 +533,9 @@ class MainClass{
       cont++;
     }
   }
+
+
+  
   public static void MedicosOP(){
     Console.WriteLine("---Lista de Médicos---");
     List<Medico> medicos = f.ListarMed();
