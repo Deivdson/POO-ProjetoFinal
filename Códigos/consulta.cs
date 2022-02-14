@@ -34,6 +34,13 @@ class Consulta : IComparable<Consulta>{
     this.status = status;
     this.data = data;
   }
+  public Consulta(string medico, string paciente,string descricao, string status, DateTime data){
+    this.medico = medico;
+    this.paciente = paciente;
+    this.descricao = descricao;
+    this.status = status;
+    this.data = data;
+  }
   public void AdicionarH(DateTime horario){
     horarios.Add(horario);
   }

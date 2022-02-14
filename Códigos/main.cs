@@ -328,7 +328,7 @@ class MainClass{
     f.AtualizarPac(p);
   }
   public static void EditarFunc(){
-    Console.WriteLine("\n-------Editar Paciente-------");
+    Console.WriteLine("\n-------Editar Funcionario-------");
     //Verifica se existem pacientes.
     List<Funcionario> funcionarios = NF.ListarFunc();
     if(funcionarios.Count == 0){
@@ -336,12 +336,15 @@ class MainClass{
       return;
     }
     //---------------------------------------------------
+    ListarFunc();
+    Console.WriteLine("Informe o funcionário que deseja atualizar:");
+    string n = Console.ReadLine();
     Console.WriteLine("Informe um novo nome:");
     string nome = Console.ReadLine();
     Console.WriteLine("Informe uma nova senha:");
     int senha = int.Parse(Console.ReadLine());
     Funcionario f = new Funcionario(nome, senha);
-    NF.AtualizarFunc(f);
+    NF.AtualizarFunc(n,f);
   }
 
 
@@ -405,10 +408,10 @@ class MainClass{
 
     Console.WriteLine("Selecione um paciente:");
     PacientesOP();
-    string paciente = Console.ReadLine();
-    Paciente p = f.ProcurarPac(paciente);
+    int idPac = int.Parse(Console.ReadLine());
+    Paciente p = f.ProcurarPacID(idPac);
     string status = "Agendada";
-    Consulta c = new Consulta(paciente,desc,status,data);
+    Consulta c = new Consulta(m.Nome,p.Nome,desc,status,data);
     m.AgendarCnslt(c);
     p.AgendarCnslt(c);
   }

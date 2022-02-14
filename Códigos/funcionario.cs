@@ -106,4 +106,7 @@ class Funcionario : IComparable<Funcionario>{
   public int CompareTo(Funcionario obj){
     return this.nome.CompareTo(obj.Nome);
   }
+  public override string ToString(){
+    return $"ID: {id} - Nome: {nome}";
+  }
 }

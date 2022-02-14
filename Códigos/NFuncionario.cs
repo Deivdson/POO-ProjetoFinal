@@ -28,8 +28,8 @@ class NFuncionario{
     funcs.RemoveAt(funcs.IndexOf(f));
   }
 
-  public void AtualizarFunc(Funcionario f){
-    Funcionario funcionario = ProcurarFunc(f.Nome);
+  public void AtualizarFunc(string nome, Funcionario f){
+    Funcionario funcionario = ProcurarFunc(nome);
     funcionario.Nome = f.Nome;
     funcionario.Senha = f.Senha;
   }
