@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.IO;
+using System.Text;
+
 
 class NFuncionario{
   List<Funcionario> funcs =  new List<Funcionario>();
@@ -32,5 +36,21 @@ class NFuncionario{
     Funcionario funcionario = ProcurarFunc(nome);
     funcionario.Nome = f.Nome;
     funcionario.Senha = f.Senha;
+  }
+  public void Abrir(){
+    Arquivo<List<Funcionario>> arquivo = new Arquivo<List<Funcionario>>();
+    funcs = arquivo.Abrir("./Funcionarios.xml");
+    foreach(Funcionario f in funcs){
+      f.AbrirPacs();
+      f.AbrirMeds();
+    }
+  }
+  public void SalvarFuncs(){
+    Arquivo<List<Funcionario>> arquivo = new Arquivo<List<Funcionario>>();
+    arquivo.Salvar("./Funcionarios.xml",ListarFunc());
+     foreach(Funcionario f in funcs){
+      f.SalvarPacs();
+      f.SalvarMeds();
+    }
   }
 }

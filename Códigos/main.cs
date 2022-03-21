@@ -3,13 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using System.Xml.Serialization;
+using System.IO;
+using System.Linq;
 
 class MainClass{
-  private static Funcionario f = new Funcionario("admin", 0100);
-  private static NFuncionario NF = new NFuncionario();
+  public static Funcionario f = new Funcionario("admin", 0100);
+  public static NFuncionario NF = new NFuncionario();
   private static Consulta cnslt = new Consulta();
   public static void Main(){
+    NF.InserirFunc(f);
     Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+    try{
+      NF.Abrir();
+      f.AbrirPacs();
+      f.AbrirMeds();
+      
+      /* List<Paciente> pacs = f.ListarPac();
+      foreach(Paciente p in pacs) p.AbrirConsultas(); */
+      
+    }catch(Exception erro){
+      Console.WriteLine(erro.Message);
+    }
     int op = 0;
     Console.WriteLine("---Sistema de Gerenciamento de Consultass---");
     do{
@@ -27,6 +42,16 @@ class MainClass{
       }
         
     }while(op!=0);
+
+    try{
+      NF.SalvarFuncs();
+      f.SalvarPacs();
+      f.SalvarMeds();
+      List<Paciente> pacs = f.ListarPac();
+      foreach(Paciente p in pacs) p.SalvarConsultas();
+    }catch(Exception erro){
+      Console.WriteLine(erro.Message);
+    }
 
     Console.WriteLine("Adios... *barulho do windows desligando*");
 
@@ -52,16 +77,16 @@ class MainClass{
     string nome = Console.ReadLine();
     Console.WriteLine("\nDigite a senha:");
     int senha = int.Parse(Console.ReadLine());
-
-    if(nome != f.Nome || senha != f.Senha){
-      Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
+    Funcionario NL = NF.ProcurarFunc(nome);
+    if(nome != NL.Nome || senha != NL.Senha){
+      Console.WriteLine("Dados incorretos! Tentar novamente (1) - Voltar ao menu inicial (0)");
       int i = int.Parse(Console.ReadLine());
       if(i==1)AreaFunc();
       else return;
     }else{
 
       Console.WriteLine("\n-----------------------------------");
-      Console.WriteLine($"Bem Vindo {f.Nome}! ");
+      Console.WriteLine($"Bem Vindo {NL.Nome}! ");
       do{
         try{
           op = MenuFunc();
@@ -81,6 +106,9 @@ class MainClass{
             case 13: ListarFunc();break;
             case 14: EditarFunc();break;
             case 15: RemoverFunc();break;
+            case 16: ListarPacNome();break; 
+            case 17: ListarMedNome();break;
+            case 18:ToXml(NF.ListarFunc(),f.ListarPac(),f.ListarMed());break;
           }
         }
         catch(Exception erro){
@@ -192,6 +220,8 @@ class MainClass{
     Console.WriteLine("12 - Cadastrar novo funcionário | 13 - Listar funcionários");
     Console.WriteLine("14 - Atualizar funcionário      | 15 - Remover funcionário");
     Console.WriteLine("----------------------------------------------");
+    Console.WriteLine("16 - Listar pacientes por nome  17 - Listar médicos por nome");
+    Console.WriteLine("[18 - Salvar dados do sistema]");
     Console.WriteLine("0 - Sair");
     Console.WriteLine("Informe uma opção: ");
     int op = int.Parse(Console.ReadLine());
@@ -213,7 +243,7 @@ class MainClass{
   }
   public static int MenuPac(){
     Console.WriteLine("\n---------Menu Paciente-----------");
-    Console.WriteLine("1 - Agendar consulta");
+    Console.WriteLine("1 - Solicitar consulta");
     Console.WriteLine("2 - Listar consultas");
 
     Console.WriteLine("0 - Voltar");
@@ -229,8 +259,18 @@ class MainClass{
     string nome = Console.ReadLine();
     Console.WriteLine("Informe o cpf:");
     string cpf = Console.ReadLine();
-    Console.WriteLine("Informe a data de nascimento:");
-    DateTime nascimento = DateTime.Parse(Console.ReadLine());
+    DateTime nascimento = new DateTime();
+    
+    try{
+      Console.WriteLine("Informe a data de nascimento:");
+      nascimento = DateTime.Parse(Console.ReadLine());
+      if(DateTime.Now<=nascimento){
+        throw new ArgumentOutOfRangeException("O valor informado não é valido");
+      }
+    }
+    catch(FormatException){
+      Console.WriteLine("Formato da data inválido");
+    }
 
     Medico m = new Medico(nome, cpf, nascimento);
     f.InserirMed(m);
@@ -241,12 +281,21 @@ class MainClass{
     string nome = Console.ReadLine();
     Console.WriteLine("Informe o cpf:");
     string cpf = Console.ReadLine();
-    Console.WriteLine("Informe a data de nascimento:");
-    DateTime nascimento = DateTime.Parse(Console.ReadLine());
+    DateTime nascimento = new DateTime();
+     
+    try{ 
+      Console.WriteLine("Informe a data de nascimento:");
+      nascimento = DateTime.Parse(Console.ReadLine());
+      if(DateTime.Now<=nascimento){
+        throw new ArgumentOutOfRangeException("O valor informado não é valido");
+      }
+    } 
+    catch(FormatException){
+      Console.WriteLine("Formato da data inválido");
+    }
 
-    Paciente p = new Paciente(nome, cpf, nascimento);
+   Paciente p = new Paciente(nome, cpf, nascimento);
     f.InserirPac(p);
-
   }
   public static void CadastrarFunc(){
     Console.WriteLine("---Cadastro de Funcionarios---");
@@ -268,8 +317,26 @@ class MainClass{
       Console.WriteLine("Nenhum médico cadastrado.");
       return;
     }
-    foreach(Medico m in medicos) Console.WriteLine($"{m.Nome}\n");
+    var v1= medicos.Select(m=> new {
+      Nome = m.Nome, 
+      Idade = DateTime.Now.Year - m.Nascimento.Year
+    });
+
+    foreach(var obj in v1)Console.WriteLine(obj);
   }
+
+  public static void ListarMedNome(){
+    Console.WriteLine("---Lista de Médicos---");
+    Console.WriteLine("\n Digite um nome: ");
+    string n = Console.ReadLine();
+    List<Medico> medicos = f.ListarMedNome(n);
+    if(medicos.Count == 0){
+      Console.WriteLine("Nenhum médico cadastrado com esse nome.");
+      return;
+    }
+    foreach(Medico m in medicos) Console.WriteLine($"Nome: {m.Nome} {m.Id}\n");
+  }
+  
   public static void ListarPac(){
     Console.WriteLine("---Lista de Pacientes---");
     List<Paciente> pacientes = f.ListarPac();
@@ -277,8 +344,38 @@ class MainClass{
       Console.WriteLine("Nenhum paciente cadastrado.");
       return;
     }
-    foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n");
+   
+    var v1= pacientes.Select(p=> new {
+      Nome = p.Nome, 
+      Gasto_Total = p.Valores.Sum()
+    });
+
+    foreach(var obj in v1)Console.WriteLine(obj);
+
+
+    Console.WriteLine();
+    var v2 = v1.GroupBy(obj=>obj.Nome, (key, valores) => new{
+      Nome= key,
+      Tamanho_Lista= valores.Count()
+    });
+    foreach(var obj in v2)Console.WriteLine(obj);
+   /*  foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n"); */
   }
+
+  public static void ListarPacNome(){
+    Console.WriteLine("---Lista de Pacientes---");
+    Console.WriteLine("\n Digite um nome: ");
+    string n = Console.ReadLine();
+    List<Paciente> pacientes = f.ListarPacNome(n);
+    if(pacientes.Count == 0){
+      Console.WriteLine("Nenhum paciente cadastrado com esse nome.");
+      return;
+    }
+  
+    foreach(Paciente p in pacientes) Console.WriteLine($"Nome: {p.Nome} ID: {p.Id}\n"); 
+  }
+
+  
   public static void ListarFunc(){
     Console.WriteLine("---Lista de Funcionários---");
     List<Funcionario> funcionarios = NF.ListarFunc();
@@ -304,8 +401,17 @@ class MainClass{
     string nome = Console.ReadLine();
     Console.WriteLine("Informe um novo cpf:");
     string cpf = Console.ReadLine();
+    DateTime data = new DateTime();
+    try{
     Console.WriteLine("Informe uma nova data de nascimento:");
-    DateTime data = DateTime.Parse(Console.ReadLine());
+    data = DateTime.Parse(Console.ReadLine());
+    if(DateTime.Now<=data){
+        throw new ArgumentOutOfRangeException("O valor informado não é valido");
+      }
+    }
+    catch(FormatException){
+      Console.WriteLine("Formato da data invalido");
+    }
     Medico m = new Medico(nome,cpf,data);
     f.AtualizarMed(m);
   }
@@ -412,6 +518,7 @@ class MainClass{
     Paciente p = f.ProcurarPacID(idPac);
     string status = "Agendada";
     Consulta c = new Consulta(m.Nome,p.Nome,desc,status,data);
+    c.Custo=10;
     m.AgendarCnslt(c);
     p.AgendarCnslt(c);
   }
@@ -434,6 +541,7 @@ class MainClass{
     string status = "Em processo.";
 
     Consulta c = new Consulta(p.Nome,desc,status);
+    c.Custo=15;
     p.AgendarCnslt(c);
   }
   public static void ConsultasPac(Paciente p){
@@ -444,6 +552,12 @@ class MainClass{
       return;
     }
     foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
+    var v1= consultas.Select(c=>c.Descricao);
+    var v2= consultas.Select(c=>c.Paciente);
+    foreach(string s in v2){   
+      Console.WriteLine($"Nome: {s}");
+      foreach(string s1 in v1) Console.WriteLine($"Descrição: {s1}");
+    }
   }
 
 
@@ -480,7 +594,7 @@ class MainClass{
     }
 
     //---------------------------------------------------
-    Console.WriteLine("Lista de pacientes:");
+    Console.WriteLine("----Lista de pacientes----");
     foreach(Paciente p in pacientes){
       Console.WriteLine($"[{p.Nome}]\n");
       List<Consulta> consultas = p.ListarConsultas();
@@ -499,19 +613,28 @@ class MainClass{
 
     Console.WriteLine("Informe o status atual da consulta:");
     string status = Console.ReadLine();
+    DateTime data = new DateTime();
+
+    try{
     Console.WriteLine("Informe uma data e horário:");
-    DateTime data = DateTime.Parse(Console.ReadLine());
+    data = DateTime.Parse(Console.ReadLine());
+    if(data<DateTime.Now) throw new ArgumentOutOfRangeException("Data inválida - a menos que você consiga voltar no tempo.");
+    }
+    catch(FormatException){
+      Console.WriteLine("Formato da data inválido!");
+    }
 
-
-    Console.WriteLine("Lista de médicos:");
+    Console.WriteLine("\n----Lista de médicos----");
     foreach(Medico m in medicos)
       Console.WriteLine($"ID: {m.Id} - Nome: {m.Nome}");
 
     Console.WriteLine("Informe um ID:");
     int index = int.Parse(Console.ReadLine());
+    
     Medico medico = f.ProcurarMedID(index);
-
-
+    /*
+    Consulta con = new Consulta(paciente.Nome, status, data);
+    medico.AgendarCnslt(con);  */
     paciente.AtualizarConsulta(id,medico,data,status);
   }
 
@@ -560,6 +683,31 @@ class MainClass{
     foreach(Paciente p in pacientes){
       Console.WriteLine($"{p.Id} - {p.Nome}\n");
     }    
+  }
+
+  public static void ToXml(List<Funcionario> funcs, List<Paciente> pacs, List<Medico> meds){
+    NF.SalvarFuncs();
+    /* XmlSerializer XmlFunc = new XmlSerializer(typeof(List<Funcionario>)); */
+    
+    /* XmlSerializer XmlPac = new XmlSerializer(typeof(List<Paciente>));
+    
+    XmlSerializer XmlMed = new XmlSerializer(typeof(List<Medico>)); */
+
+    /* XmlSerializer XmlCon = new XmlSerializer(typeof(List<Consutla>)); */
+
+    /* StreamWriter f = new  StreamWriter("Funcionarios.xml");
+    XmlFunc.Serialize(f, funcs); */
+    /* StreamWriter p = new  StreamWriter("Pacientes.xml");
+    XmlPac.Serialize(p, pacs);
+    StreamWriter m = new  StreamWriter("Medicos.xml");
+    XmlMed.Serialize(m, meds); */
+    /* StreamWriter c = new  StreamWriter("Consultas.xml");
+    XmlCon.Serialize(c, consultas); */
+    /*f .Close();
+    p.Close();
+    m.Close(); */
+    /* c.Close(); */
+    
   }
 }
 

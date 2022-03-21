@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.IO;
+using System.Text;
 
-class Consulta : IComparable<Consulta>{
+public class Consulta : IComparable<Consulta>{
   private string medico, paciente;
   private string descricao;
   private string diagnostico;
   private string status;
   private DateTime data;
   private int id;
+  private int custo;
   private List<DateTime> horarios = new List<DateTime>();
   
 
@@ -19,6 +23,7 @@ class Consulta : IComparable<Consulta>{
   public string Status{get=>status;set=>status=value;}
   public DateTime Data{get=>data;set=>data=value;}
   public int Id{get=>id; set=>id=value;}
+  public int Custo{get=>custo; set=>custo=value;}
 
   public Consulta(){}
 
@@ -26,11 +31,11 @@ class Consulta : IComparable<Consulta>{
     this.paciente = paciente;
     this.descricao = descricao;
     this.status = status;
+    this.data = DateTime.Now;
   }
 
-  public Consulta(string paciente,string descricao, string status, DateTime data){
+  public Consulta(string paciente, string status, DateTime data){
     this.paciente = paciente;
-    this.descricao = descricao;
     this.status = status;
     this.data = data;
   }
@@ -56,7 +61,7 @@ class Consulta : IComparable<Consulta>{
   }
 
   public int CompareTo(Consulta obj){
-    return this.id.CompareTo(obj.Id);
+    return this.status.CompareTo(obj.Status);
   }
   
   public override string ToString(){

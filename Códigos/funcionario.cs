@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
+using System.IO;
+using System.Text;
 
-class Funcionario : IComparable<Funcionario>{
+public class Funcionario : IComparable<Funcionario>{
   private string nome;
   private int senha;
   private int id;
@@ -13,6 +16,9 @@ class Funcionario : IComparable<Funcionario>{
   public string Nome{get => nome; set => nome = value;}
   public int Senha{get => senha; set => senha = value;}
   public int Id{get=>id;set=>id=value;}
+
+  /* static Funcionario obj = new Funcionario();
+  public static Funcionario Singleton {get=>obj;} */
 
   public Funcionario(){}
 
@@ -36,12 +42,17 @@ class Funcionario : IComparable<Funcionario>{
     pacs.Add(p);
   }
   public List<Medico> ListarMed(){
-    meds.Sort();
-    return meds;
+    return meds.OrderBy(obj=>obj.Nome).ToList();
   }
   public List<Paciente> ListarPac(){
-    pacs.Sort();
-    return pacs;
+    return pacs.OrderBy(obj=>obj.Nome).ToList();
+  }
+
+  public List<Medico> ListarMedNome(string n){
+    return meds.Where(m=>m.Nome==n).ToList();
+  }
+  public List<Paciente> ListarPacNome(string n){
+    return pacs.Where(p=>p.Nome==n).ToList();
   }
   //Procurar
   public Medico ProcurarMed(string nome){
@@ -109,4 +120,43 @@ class Funcionario : IComparable<Funcionario>{
   public override string ToString(){
     return $"ID: {id} - Nome: {nome}";
   }
+
+  public void AbrirPacs(){
+    Arquivo<List<Paciente>> arquivo = new Arquivo<List<Paciente>>();
+    pacs = arquivo.Abrir("./Pacientes.xml");
+    /* foreach(Paciente p in pacs) p.AbrirConsultas(); */
+    
+  }
+  public void SalvarPacs(){
+    Arquivo<List<Paciente>> arquivo = new Arquivo<List<Paciente>>();
+    arquivo.Salvar("./Pacientes.xml",ListarPac());
+    /* foreach(Paciente p in pacs) p.SalvarConsultas(); */
+    
+  }
+
+  public void AbrirMeds(){
+    Arquivo<List<Medico>> arquivo = new Arquivo<List<Medico>>();
+    meds = arquivo.Abrir("./Medicos.xml");
+    /* foreach(Medico m in meds) m.AbrirConsultas(); */
+    
+  }
+  public void SalvarMeds(){
+    Arquivo<List<Medico>> arquivo = new Arquivo<List<Medico>>();
+    arquivo.Salvar("./Medicos.xml",ListarMed());
+    /* foreach(Medico m in meds) m.SalvarConsultas(); */
+    
+  }
+
+  /* private void AtualizarConsultasP(){
+    for(int i=0;i<pacs.Count;i++){
+      Paciente p = pacs[i];
+      for(int j=0;j<p.ListarConsultas().Count;j++){
+        Consulta c = Paciente.Singleton.ProcurarConsultaId(p.ListarConsultasId()[j]);
+        if(c!=null){
+          p.AgendarCnslt(c);
+        }
+      }
+      
+    }
+  } */
 }

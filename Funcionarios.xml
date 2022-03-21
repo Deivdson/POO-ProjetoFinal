@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfFuncionario xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Funcionario>
+    <Nome>admin</Nome>
+    <Senha>100</Senha>
+    <Id>1</Id>
+  </Funcionario>
+  <Funcionario>
+    <Nome>Fernando</Nome>
+    <Senha>123</Senha>
+    <Id>2</Id>
+  </Funcionario>
+</ArrayOfFuncionario>
