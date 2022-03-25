@@ -1,2 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ArrayOfConsulta xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+<ArrayOfConsulta xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Consulta>
+    <Medico>
+      <Nome>pedro</Nome>
+      <Cpf>123</Cpf>
+      <Nascimento>2003-01-01T00:00:00</Nascimento>
+      <Id>1</Id>
+    </Medico>
+    <Paciente>
+      <Nome>V23</Nome>
+      <Cpf>123</Cpf>
+      <Nascimento>2010-10-10T00:00:00</Nascimento>
+      <Id>1</Id>
+      <Valores />
+    </Paciente>
+    <Descricao>sda</Descricao>
+    <Status>Agendada</Status>
+    <Data>2003-10-10T00:00:00</Data>
+    <Id>1</Id>
+    <Custo>10</Custo>
+  </Consulta>
+</ArrayOfConsulta>

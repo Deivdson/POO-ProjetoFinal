@@ -29,11 +29,11 @@ public class Medico : IComparable<Medico>{
   public void AgendarCnslt(Consulta c){
     //p.AgendarCnslt();
     int max=0;
-    /* foreach(Consulta obj in consultas)
+    foreach(Consulta obj in consultas)
       if(obj.Id>max)max=obj.Id;
-    c.Id=max+1; */
-    max = consultas.Max(obj=>obj.Id);
-    c.Id = max+1;
+    c.Id=max+1;
+    /* max = consultas.Max(obj=>obj.Id);
+    c.Id = max+1; */
     consultas.Add(c);
   }
 

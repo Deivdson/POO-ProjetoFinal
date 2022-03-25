@@ -29,16 +29,21 @@ public class Funcionario : IComparable<Funcionario>{
 
   public void InserirMed(Medico m){
     int max=0;
-    foreach(Medico obj in meds)
+    /* foreach(Medico obj in meds)
       if(obj.Id>max)max=obj.Id;
-    m.Id=max+1;
+    m.Id=max+1; */
+
+    max = meds.Max(obj=>obj.Id);
+    m.Id = max+1;
     meds.Add(m);
   }
   public void InserirPac(Paciente p){
     int max=0;
-    foreach(Paciente obj in pacs)
+    /* foreach(Paciente obj in pacs)
       if(obj.Id>max)max=obj.Id;
-    p.Id=max+1;
+    p.Id=max+1; */
+    max = pacs.Max(obj=>obj.Id);
+    p.Id = max+1;
     pacs.Add(p);
   }
   public List<Medico> ListarMed(){

@@ -9,7 +9,12 @@ using System.Linq;
 
 class MainClass{
   public static Funcionario f = new Funcionario("admin", 0100);
+  
   public static NFuncionario NF = new NFuncionario();
+  public static NMedico NM = new NMedico();
+  public static NPaciente NP = new NPaciente();
+  public static NConsulta NC = new NConsulta();
+  
   private static Consulta cnslt = new Consulta();
   public static void Main(){
     NF.InserirFunc(f);
@@ -30,10 +35,7 @@ class MainClass{
         List<Consulta> consuls = m.ListarConsultas();
         foreach(Consulta c in consuls){
           c.Medico = m;
-                                      }
-
-
-        
+        }  
       }
       
     }catch(Exception erro){
@@ -61,6 +63,7 @@ class MainClass{
       NF.SalvarFuncs();
       f.SalvarPacs();
       f.SalvarMeds();
+      
       List<Paciente> pacs = f.ListarPac();
       foreach(Paciente p in pacs) p.SalvarConsultas();
     }catch(Exception erro){
@@ -100,7 +103,7 @@ class MainClass{
     }else{
 
       Console.WriteLine("\n-----------------------------------");
-      Console.WriteLine($"Bem Vindo {NL.Nome}! ");
+      Console.WriteLine($"Bem Vind@ {NL.Nome}! ");
       do{
         try{
           op = MenuFunc();
@@ -122,7 +125,7 @@ class MainClass{
             case 15: RemoverFunc();break;
             case 16: ListarPacNome();break; 
             case 17: ListarMedNome();break;
-            case 18:ToXml(NF.ListarFunc(),f.ListarPac(),f.ListarMed());break;
+            case 18:ToXml(NF.ListarFunc(),NP.ListarPac(),NM.ListarMed());break;
           }
         }
         catch(Exception erro){
@@ -138,7 +141,7 @@ class MainClass{
     int op = 0;
     Console.WriteLine("\n--------------------");
     //Verifica se existem médicos
-    List<Medico> medicos = f.ListarMed();
+    List<Medico> medicos = NM.ListarMed();
     if(medicos.Count == 0){
       Console.WriteLine("Nenhum médico cadastrado.");
       return;
@@ -160,7 +163,7 @@ class MainClass{
     }else{
 
       Console.WriteLine("\n-----------------------------------");
-      Console.WriteLine($" Bem Vindo {m.Nome}! ");
+      Console.WriteLine($" Bem Vind@ {m.Nome}! ");
       do{
         try{
           op = MenuMed();
@@ -183,7 +186,7 @@ class MainClass{
     int op = 0;
     Console.WriteLine("\n--------------------");
     //Verifica se existem pacientes.
-    List<Paciente> pacientes = f.ListarPac();
+    List<Paciente> pacientes = NP.ListarPac();
     if(pacientes.Count == 0){
       Console.WriteLine("Nenhum paciente cadastrado.");
       return;
@@ -195,7 +198,7 @@ class MainClass{
     Console.WriteLine("\nDigite o cpf:");
     int cpf = int.Parse(Console.ReadLine());
 
-    Paciente p = f.ProcurarPac(nome);
+    Paciente p = NP.ProcurarPac(nome);
 
     if(!(nome.Equals(p.Nome) || cpf.Equals(p.Cpf))){
       Console.WriteLine("Dados incorretos! Deseja tentar novamente (1) ou voltar ao menu inicial?(0)");
@@ -309,7 +312,7 @@ class MainClass{
     }
 
    Paciente p = new Paciente(nome, cpf, nascimento);
-    f.InserirPac(p);
+    NP.InserirPac(p);
   }
   public static void CadastrarFunc(){
     Console.WriteLine("---Cadastro de Funcionarios---");
@@ -326,7 +329,7 @@ class MainClass{
 
   public static void ListarMed(){
     Console.WriteLine("---Lista de Médicos---");
-    List<Medico> medicos = f.ListarMed();
+    List<Medico> medicos = NM.ListarMed();
     if(medicos.Count == 0){
       Console.WriteLine("Nenhum médico cadastrado.");
       return;
@@ -343,7 +346,7 @@ class MainClass{
     Console.WriteLine("---Lista de Médicos---");
     Console.WriteLine("\n Digite um nome: ");
     string n = Console.ReadLine();
-    List<Medico> medicos = f.ListarMedNome(n);
+    List<Medico> medicos = NM.ListarMedNome(n);
     if(medicos.Count == 0){
       Console.WriteLine("Nenhum médico cadastrado com esse nome.");
       return;
@@ -353,7 +356,7 @@ class MainClass{
   
   public static void ListarPac(){
     Console.WriteLine("---Lista de Pacientes---");
-    List<Paciente> pacientes = f.ListarPac();
+    List<Paciente> pacientes = NP.ListarPac();
     if(pacientes.Count == 0){
       Console.WriteLine("Nenhum paciente cadastrado.");
       return;
@@ -380,7 +383,7 @@ class MainClass{
     Console.WriteLine("---Lista de Pacientes---");
     Console.WriteLine("\n Digite um nome: ");
     string n = Console.ReadLine();
-    List<Paciente> pacientes = f.ListarPacNome(n);
+    List<Paciente> pacientes = NP.ListarPacNome(n);
     if(pacientes.Count == 0){
       Console.WriteLine("Nenhum paciente cadastrado com esse nome.");
       return;
@@ -400,17 +403,16 @@ class MainClass{
     foreach(Funcionario func in funcionarios) Console.WriteLine($"{func.Nome}\n");
   }
 
-
-
   public static void EditarMed(){
     Console.WriteLine("\n-------Editar Médico-------");
     //Verifica se existem médicos
-    List<Medico> medicos = f.ListarMed();
+    List<Medico> medicos = NM.ListarMed();
     if(medicos.Count == 0){
       Console.WriteLine("Nenhum médico cadastrado.");
       return;
     }
     //-------------------------------------------------
+    ListarMed();
     Console.WriteLine("Informe um novo nome:");
     string nome = Console.ReadLine();
     Console.WriteLine("Informe um novo cpf:");
@@ -427,7 +429,7 @@ class MainClass{
       Console.WriteLine("Formato da data invalido");
     }
     Medico m = new Medico(nome,cpf,data);
-    f.AtualizarMed(m);
+    NM.AtualizarMed(m);
   }
   public static void EditarPac(){
     Console.WriteLine("\n-------Editar Paciente-------");
@@ -438,6 +440,7 @@ class MainClass{
       return;
     }
     //---------------------------------------------------
+    ListarPac();
     Console.WriteLine("Informe um novo nome:");
     string nome = Console.ReadLine();
     Console.WriteLine("Informe um novo cpf:");
@@ -445,7 +448,7 @@ class MainClass{
     Console.WriteLine("Informe uma nova data de nascimento:");
     DateTime data = DateTime.Parse(Console.ReadLine());
     Paciente p = new Paciente(nome,cpf,data);
-    f.AtualizarPac(p);
+    NP.AtualizarPac(p);
   }
   public static void EditarFunc(){
     Console.WriteLine("\n-------Editar Funcionario-------");
@@ -467,12 +470,10 @@ class MainClass{
     NF.AtualizarFunc(n,f);
   }
 
-
-
   public static void RemoverMed(){
     Console.WriteLine("-----Exclusão de Médicos-----");
     //Verifica se existem médicos
-    List<Medico> medicos = f.ListarMed();
+    List<Medico> medicos = NM.ListarMed();
     if(medicos.Count == 0){
       Console.WriteLine("Nenhum médico cadastrado.");
       return;
@@ -481,13 +482,13 @@ class MainClass{
     ListarMed();
     Console.WriteLine("Informe o médico que deseja remover");
     string nome = Console.ReadLine();
-    Medico m = f.ProcurarMed(nome);
-    f.RemoverMed(m);
+    Medico m = NM.ProcurarMed(nome);
+    NM.RemoverMed(m);
   }
   public static void RemoverPac(){
     Console.WriteLine("-----Exclusão de Pacientes-----");
     //Verifica se existem pacientes.
-    List<Paciente> pacientes = f.ListarPac();
+    List<Paciente> pacientes = NP.ListarPac();
     if(pacientes.Count == 0){
       Console.WriteLine("Nenhum paciente cadastrado.");
       return;
@@ -496,8 +497,8 @@ class MainClass{
     ListarPac();
     Console.WriteLine("Informe o paciente que deseja remover");
     string nome = Console.ReadLine();
-    Paciente p = f.ProcurarPac(nome);
-    f.RemoverPac(p);
+    Paciente p = NP.ProcurarPac(nome);
+    NP.RemoverPac(p);
   }
   public static void RemoverFunc(){
     Console.WriteLine("-----Exclusão de Funcionários-----");
@@ -529,7 +530,7 @@ class MainClass{
     Console.WriteLine("Selecione um paciente:");
     PacientesOP();
     int idPac = int.Parse(Console.ReadLine());
-    Paciente p = f.ProcurarPacID(idPac);
+    Paciente p = NP.ProcurarPacID(idPac);
     string status = "Agendada";
     Consulta c = new Consulta(m,p,desc,status,data);
     c.Custo=10;
@@ -538,13 +539,15 @@ class MainClass{
   }
   public static void ConsultasMed(Medico m){
     Console.WriteLine("---Lista de Consultas---");
-    List<Consulta> consultas = m.ListarConsultas();
+    List<Consulta> consultas = NC.ListarConsultas();
     if(consultas.Count == 0){
       Console.WriteLine("Nenhuma consulta agendada.");
       return;
     }
     Console.WriteLine(m.Nome.Take(4));
-    foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
+    foreach(Consulta c in consultas){
+      if(c.Medico.Nome==m.Nome)Console.WriteLine($"{c}\n");
+    } 
   }
 
 
@@ -559,12 +562,14 @@ class MainClass{
     c.Custo=15;
     p.AgendarCnslt(c);
   }
+  
   public static void ConsultasPac(Paciente p){
     Console.WriteLine("---Lista de Consultas---");
-    List<Consulta> consultas = p.ListarConsultas();
+    List<Consulta> consultas = NC.ListarConsultasID(p.Id);
     if(consultas.Count == 0){
       Console.WriteLine("Nenhuma consulta agendada.");
       return;
+    }
     }
     foreach(Consulta c in consultas) Console.WriteLine($"{c}\n");
     var v1= consultas.Select(c=>c.Descricao);
@@ -575,16 +580,16 @@ class MainClass{
     }
   }
 
-
   public static void AtualizarConsultaMed(Medico m){
     Console.WriteLine("\n-------Atualizar Consulta-------");
     //Verifica se existem consultas.
-    List<Consulta> consultas = m.ListarConsultas();
+    List<Consulta> consultas = NC.ListarConsultasID(m.Id);
     if(consultas.Count == 0){
       Console.WriteLine("Nenhuma consulta agendada.");
       return;
     }
     //---------------------------------------------------
+    foreach(Consulta c in consultas) Console.WriteLine(c);
     Console.WriteLine("Informe o ID da consulta:");
     int id = int.Parse(Console.ReadLine());
     Console.WriteLine("Informe o status atual da consulta:");
@@ -592,13 +597,13 @@ class MainClass{
     Console.WriteLine("Informe o diagnóstico:");
     string diag = Console.ReadLine();
 
-    m.AtualizarConsulta(id,status,diag);
+    NC.AtualizarConsulta(id,status,diag);
   }
   public static void AtualizarConsultaPac(){
     Console.WriteLine("\n-------Gerenciamento de Consultas-------");
     //Verifica se existem paciente.
-    List<Paciente> pacientes = f.ListarPac();
-    List<Medico> medicos = f.ListarMed();
+    List<Paciente> pacientes = NP.ListarPac();
+    List<Medico> medicos = NM.ListarMed();
     if(pacientes.Count == 0){
       Console.WriteLine("Nenhum paciente cadastrado.");
       return;
@@ -612,7 +617,7 @@ class MainClass{
     Console.WriteLine("----Lista de pacientes----");
     foreach(Paciente p in pacientes){
       Console.WriteLine($"[{p.Nome}]\n");
-      List<Consulta> consultas = p.ListarConsultas();
+      List<Consulta> consultas = NC.ListarConsultas();
       if(consultas.Count == 0){
         Console.WriteLine("Nenhuma consulta cadastrada.");
         return;
@@ -624,7 +629,7 @@ class MainClass{
     string pac = Console.ReadLine();
     Console.WriteLine("Informe o ID da consulta:");
     int id = int.Parse(Console.ReadLine());
-    Paciente paciente = f.ProcurarPac(pac);
+    Paciente paciente = NP.ProcurarPac(pac);
 
     Console.WriteLine("Informe o status atual da consulta:");
     string status = Console.ReadLine();
@@ -646,11 +651,11 @@ class MainClass{
     Console.WriteLine("Informe um ID:");
     int index = int.Parse(Console.ReadLine());
     
-    Medico medico = f.ProcurarMedID(index);
+    Medico medico = NM.ProcurarMedID(index);
     /*
     Consulta con = new Consulta(paciente.Nome, status, data);
     medico.AgendarCnslt(con);  */
-    paciente.AtualizarConsulta(id,medico,data,status);
+    NC.AtualizarConsulta(id,medico,paciente,data,status);
   }
 
 
@@ -679,7 +684,7 @@ class MainClass{
   
   public static void MedicosOP(){
     Console.WriteLine("---Lista de Médicos---");
-    List<Medico> medicos = f.ListarMed();
+    List<Medico> medicos = NM.ListarMed();
     if(medicos.Count == 0){
       Console.WriteLine("Nenhum médico disponível.");
       return;
@@ -690,7 +695,7 @@ class MainClass{
   }
   public static void PacientesOP(){
     Console.WriteLine("---Lista de Paciente---");
-    List<Paciente> pacientes = f.ListarPac();
+    List<Paciente> pacientes = NP.ListarPac();
     if(pacientes.Count == 0){
       Console.WriteLine("Nenhum paciente disponível.");
       return;

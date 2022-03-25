@@ -15,7 +15,6 @@ public class Consulta : IComparable<Consulta>{
   private int id;
   private int custo;
   private List<DateTime> horarios = new List<DateTime>();
-  
 
   public Medico Medico{get=>medico;set=>medico=value;}
   public Paciente Paciente{get=>paciente;set=>paciente = value;}
