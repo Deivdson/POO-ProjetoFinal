@@ -4,18 +4,23 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 
 class NPaciente{
+  private NPaciente(){}
+  static NPaciente obj = new NPaciente();
+  public static NPaciente Singleton {get=> obj;}
+  
   private List<Paciente> pacs = new List<Paciente>();
 
   public void InserirPac(Paciente p){
     int max=0;
-    /* foreach(Paciente obj in pacs)
+    foreach(Paciente obj in pacs)
       if(obj.Id>max)max=obj.Id;
-    p.Id=max+1; */
-    max = pacs.Max(obj=>obj.Id);
-    p.Id = max+1;
+    p.Id=max+1;
+    /* max = pacs.Max(obj=>obj.Id);
+    p.Id = max+1; */
     pacs.Add(p);
   }
 
@@ -41,14 +46,14 @@ class NPaciente{
       if(pacs[i].Id==id)return pacs[i];
     }
     return null; */
-    var r = paciente.Where(obj => obj.Id()==id);
-    if(r.Count==0) return null;
+    var r = pacs.Where(obj => obj.Id==id);
+    if(r.Count()==0) return null;
     return r.First();
   }
 
   public void RemoverPac(Paciente p){
     pacs.RemoveAt(pacs.IndexOf(p));
-    List<Consulta> consultas = p.ListarConsultas();
+    List<Consulta> consultas = p.ListarCnslt();
     foreach(Consulta c in consultas){
       c.Descricao = null;
       c.Diagnostico = null;
@@ -56,29 +61,21 @@ class NPaciente{
     }
   }
 
-  public void AtualizarPac(Paciente p){
-    Paciente paciente = ProcurarPacID(p.Id);
+  public void AtualizarPac(int id,Paciente p){
+    Paciente paciente = ProcurarPacID(id);
     paciente.Nome = p.Nome;
     paciente.Cpf = p.Cpf;
     paciente.Nascimento = p.Nascimento;
   }
 
-  public void AbrirPacs(){
+  public void Abrir(){
     Arquivo<List<Paciente>> arquivo = new Arquivo<List<Paciente>>();
     pacs = arquivo.Abrir("./Pacientes.xml");
-    /* foreach(Paciente p in pacs) p.AbrirConsultas(); */
-    
   }
 
-  public void SalvarPacs(){
+  public void Salvar(){
     Arquivo<List<Paciente>> arquivo = new Arquivo<List<Paciente>>();
     arquivo.Salvar("./Pacientes.xml",ListarPac());
-    /* foreach(Paciente p in pacs) p.SalvarConsultas(); */
-    
   }
-
-  
-  
-
 
 }

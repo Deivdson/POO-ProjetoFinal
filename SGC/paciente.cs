@@ -12,6 +12,7 @@ public class Paciente : IComparable<Paciente>{
   private DateTime nascimento;
   private int id;
   private List<int> valores = new List<int>();
+  private List<Consulta> consultas = new List<Consulta>();
   
 
   public string Nome{get=>nome;set=>nome=value;}
@@ -19,6 +20,7 @@ public class Paciente : IComparable<Paciente>{
   public DateTime Nascimento{get=>nascimento;set=>nascimento=value;}
   public int Id{get=>id;set=>id=value;}
   public List<int> Valores{get=>valores;set=>valores=value;}
+  public List<Consulta> Consultas{get=>consultas;}
 
   private Paciente(){}
   /*
@@ -29,6 +31,18 @@ public class Paciente : IComparable<Paciente>{
     this.nome = nome;
     this.cpf = cpf;
     this.nascimento = nascimento;
+  }
+
+  public void InserirCnslt(Consulta c){
+    int max=0;
+    foreach(Consulta obj in consultas)
+      if(obj.Id>max)max=obj.Id;
+    c.Id=max+1;
+    consultas.Add(c); 
+  }
+
+  public List<Consulta> ListarCnslt(){
+    return consultas;
   }
 
   

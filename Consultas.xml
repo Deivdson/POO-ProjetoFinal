@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfConsulta xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Consulta>
+    <Medico>
+      <Nome>Fernando</Nome>
+      <Cpf>123</Cpf>
+      <Nascimento>2000-10-10T00:00:00</Nascimento>
+      <Id>1</Id>
+    </Medico>
+    <Paciente>
+      <Nome>Jorge</Nome>
+      <Cpf>123</Cpf>
+      <Nascimento>1990-10-10T00:00:00</Nascimento>
+      <Id>1</Id>
+      <Valores />
+      <Consultas />
+    </Paciente>
+    <Descricao>Doroas</Descricao>
+    <Diagnostico>Doença</Diagnostico>
+    <Status>Concluida</Status>
+    <Data>2023-10-10T00:00:00</Data>
+    <Id>1</Id>
+    <Custo>10</Custo>
+  </Consulta>
+  <Consulta>
+    <Medico>
+      <Nome>Fernando</Nome>
+      <Cpf>123</Cpf>
+      <Nascimento>2000-10-10T00:00:00</Nascimento>
+      <Id>1</Id>
+    </Medico>
+    <Paciente>
+      <Nome>Jorge</Nome>
+      <Cpf>123</Cpf>
+      <Nascimento>1990-10-10T00:00:00</Nascimento>
+      <Id>1</Id>
+      <Valores />
+      <Consultas />
+    </Paciente>
+    <Descricao>Nausea</Descricao>
+    <Diagnostico>Doença doída</Diagnostico>
+    <Status>Concluída</Status>
+    <Data>2023-12-20T08:00:00</Data>
+    <Id>2</Id>
+    <Custo>15</Custo>
+  </Consulta>
+</ArrayOfConsulta>

@@ -16,9 +16,6 @@ public class Funcionario : IComparable<Funcionario>{
   public int Senha{get => senha; set => senha = value;}
   public int Id{get=>id;set=>id=value;}
 
-  /* static Funcionario obj = new Funcionario();
-  public static Funcionario Singleton {get=>obj;} */
-
   public Funcionario(){}
 
   public Funcionario(string nome, int senha){
@@ -33,17 +30,4 @@ public class Funcionario : IComparable<Funcionario>{
   public override string ToString(){
     return $"ID: {id} - Nome: {nome}";
   }
-  
-  /* private void AtualizarConsultasP(){
-    for(int i=0;i<pacs.Count;i++){
-      Paciente p = pacs[i];
-      for(int j=0;j<p.ListarConsultas().Count;j++){
-        Consulta c = Paciente.Singleton.ProcurarConsultaId(p.ListarConsultasId()[j]);
-        if(c!=null){
-          p.AgendarCnslt(c);
-        }
-      }
-      
-    }
-  } */
 }

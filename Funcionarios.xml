@@ -6,8 +6,8 @@
     <Id>1</Id>
   </Funcionario>
   <Funcionario>
-    <Nome>Fernando</Nome>
-    <Senha>123</Senha>
+    <Nome>J Freire</Nome>
+    <Senha>100</Senha>
     <Id>2</Id>
   </Funcionario>
 </ArrayOfFuncionario>

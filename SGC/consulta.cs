@@ -8,13 +8,15 @@ using System.Text;
 public class Consulta : IComparable<Consulta>{
   private Medico medico;
   private Paciente paciente;
+  private int medId;
+  private int pacId;
   private string descricao;
   private string diagnostico;
   private string status;
   private DateTime data;
   private int id;
   private int custo;
-  private List<DateTime> horarios = new List<DateTime>();
+  
 
   public Medico Medico{get=>medico;set=>medico=value;}
   public Paciente Paciente{get=>paciente;set=>paciente = value;}
@@ -24,12 +26,15 @@ public class Consulta : IComparable<Consulta>{
   public DateTime Data{get=>data;set=>data=value;}
   public int Id{get=>id; set=>id=value;}
   public int Custo{get=>custo; set=>custo=value;}
+  public int PacId{get=>pacId;}
+  public int MedId{get=>medId;}
 
 
   public Consulta(){}
 
   public Consulta(Paciente paciente,string descricao, string status){
     this.paciente = paciente;
+    this.pacId = paciente.Id;
     this.descricao = descricao;
     this.status = status;
     this.data = DateTime.Now;
@@ -37,28 +42,18 @@ public class Consulta : IComparable<Consulta>{
 
   public Consulta(Paciente paciente, string status, DateTime data){
     this.paciente = paciente;
+    this.pacId = paciente.Id;
     this.status = status;
     this.data = data;
   }
   public Consulta(Medico medico, Paciente paciente,string descricao, string status, DateTime data){
     this.medico = medico;
+    this.medId = medico.Id;
     this.paciente = paciente;
+    this.pacId = paciente.Id;
     this.descricao = descricao;
     this.status = status;
     this.data = data;
-  }
-  public void AdicionarH(DateTime horario){
-    horarios.Add(horario);
-  }
-  public List<DateTime> Horarios(){
-    horarios.Sort();
-    return horarios;
-  }
-  public DateTime BuscaH(int index){
-    for(int i=1; i<horarios.Count;i++){
-      if(i==index)return horarios[i];
-    }
-    return horarios[0];
   }
 
   public int CompareTo(Consulta obj){
@@ -66,18 +61,6 @@ public class Consulta : IComparable<Consulta>{
   }
   
   public override string ToString(){
-    return $"ID: {id}\nMédico responsável: {medico}\nPaciente: {paciente}\nStatus: {status}\nDescrição: {descricao}\nDiagnóstico: {diagnostico}\nData da Consulta: {data}";
+    return $"ID: {id}\nMédico responsável: {medico.Nome}\nPaciente: \n{paciente.Nome}\nStatus: {status}\nDescrição: {descricao}\nDiagnóstico: {diagnostico}\nData da Consulta: {data}\nCusto: R$ {custo}";
   }
-  /* public void AbrirPac(Funcionario f){
-    List<Paciente> pacs = f.ListarPac();
-    foreach(Paciente p in pacs){
-      if(p.Equals(this.paciente))paciente=p;
-    }
-  }
-  public void AbrirMed(Funcionario f){
-    List<Medico> meds = f.ListarMed();
-    foreach(Medico m in meds){
-      if(m;Id==medId)medico=m;
-    }
-  } */
 }

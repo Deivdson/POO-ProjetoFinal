@@ -4,28 +4,33 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 
 class NMedico{
+  private NMedico(){}
+  static NMedico obj = new NMedico();
+  public static NMedico Singleton {get=> obj;}
+  
   private List<Medico> meds = new List<Medico>();
 
   public void InserirMed(Medico m){
     int max=0;
-    /* foreach(Medico obj in meds)
+    foreach(Medico obj in meds)
       if(obj.Id>max)max=obj.Id;
-    m.Id=max+1; */
+    m.Id=max+1;
 
-    max = meds.Max(obj=>obj.Id);
-    m.Id = max+1;
+    /* max = meds.Max(obj=>obj.Id);
+    m.Id = max+1; */
     meds.Add(m);
   }
 
   public List<Medico> ListarMed(){
-    return meds.OrderBy(obj=>obj.Nome).ToList();
+    return meds.Take(meds.Count()).OrderBy(obj=>obj.Nome).ToList();
   }
 
   public List<Medico> ListarMedNome(string n){
-    return meds.Where(m=>m.Nome==n).ToList();
+    return meds.Take(meds.Count()).Where(m=>m.Nome==n).ToList();
   }
   
   //Procurar
@@ -37,15 +42,18 @@ class NMedico{
   }
   //Procurar id
   public Medico ProcurarMedID(int id){
-    for(int i=0; i<meds.Count ;i++){
+    /* for(int i=0; i<meds.Count ;i++){
       if(meds[i].Id==id)return meds[i];
     }
-    return null;
+    return null; */
+    var r = meds.Where(obj => obj.Id==id);
+    if(r.Count()==0) return null;
+    return r.First();
   }
   
   public void RemoverMed(Medico m){
     meds.RemoveAt(meds.IndexOf(m));
-    List<Consulta> consultas = m.ListarConsultas();
+    List<Consulta> consultas = m.ListarCnslt();
     foreach(Consulta c in consultas){
       c.Descricao = null;
       c.Diagnostico = null;
@@ -60,18 +68,14 @@ class NMedico{
     medico.Nascimento = m.Nascimento;
   }
 
-  public void AbrirMeds(){
+  public void Abrir(){
     Arquivo<List<Medico>> arquivo = new Arquivo<List<Medico>>();
     meds = arquivo.Abrir("./Medicos.xml");
-    /* foreach(Medico m in meds) m.AbrirConsultas(); */
-    
   }
-  public void SalvarMeds(){
+  
+  public void Salvar(){
     Arquivo<List<Medico>> arquivo = new Arquivo<List<Medico>>();
     arquivo.Salvar("./Medicos.xml",ListarMed());
-    /* foreach(Medico m in meds) m.SalvarConsultas(); */
-    
   }
-
-  
+ 
 }

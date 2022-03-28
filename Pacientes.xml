@@ -1,17 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfPaciente xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Paciente>
-    <Nome>felipe</Nome>
+    <Nome>Jorge</Nome>
     <Cpf>123</Cpf>
     <Nascimento>1990-10-10T00:00:00</Nascimento>
-    <Id>2</Id>
-    <Valores />
-  </Paciente>
-  <Paciente>
-    <Nome>V23</Nome>
-    <Cpf>123</Cpf>
-    <Nascimento>2010-10-10T00:00:00</Nascimento>
     <Id>1</Id>
     <Valores />
+    <Consultas />
   </Paciente>
 </ArrayOfPaciente>
