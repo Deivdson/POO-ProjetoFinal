@@ -16,12 +16,12 @@ class NMedico{
 
   public void InserirMed(Medico m){
     int max=0;
-    foreach(Medico obj in meds)
+    /* foreach(Medico obj in meds)
       if(obj.Id>max)max=obj.Id;
-    m.Id=max+1;
+    m.Id=max+1; */
 
-    /* max = meds.Max(obj=>obj.Id);
-    m.Id = max+1; */
+    max = meds.Max(obj=>obj.Id);
+    m.Id = max+1;
     meds.Add(m);
   }
 
@@ -61,8 +61,8 @@ class NMedico{
     }
   }
   
-  public void AtualizarMed(Medico m){
-    Medico medico = ProcurarMedID(m.Id);
+  public void AtualizarMed(int id,Medico m){
+    Medico medico = ProcurarMedID(id);
     medico.Nome = m.Nome;
     medico.Cpf = m.Cpf;
     medico.Nascimento = m.Nascimento;

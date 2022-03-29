@@ -20,10 +20,10 @@ class MainClass{
     NF.InserirFunc(f);
     Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
     try{
-      NC.Abrir();
       NF.Abrir();
       NM.Abrir();
       NP.Abrir();
+      NC.Abrir();
       
     }catch(Exception erro){
       Console.WriteLine(erro.Message);
@@ -47,16 +47,16 @@ class MainClass{
     }while(op!=0);
 
     try{
-      NC.Salvar();
       NF.Salvar();
       NM.Salvar();
       NP.Salvar();
+      NC.Salvar();
       
     }catch(Exception erro){
       Console.WriteLine(erro.Message);
     }
 
-    Console.WriteLine("Adios... *barulho do windows desligando*");
+    Console.WriteLine("Encerrando....");
 
   }
   public static int Menu(){
@@ -365,7 +365,7 @@ class MainClass{
       Console.WriteLine("Nenhum médico cadastrado com esse nome.");
       return;
     }
-    foreach(Medico m in medicos) Console.WriteLine($"Nome: {m.Nome} {m.Id}\n");
+    foreach(Medico m in medicos) Console.WriteLine($"Nome: {m.Nome} ID: {m.Id}\n");
   }
   
   public static void ListarPac(){
@@ -376,23 +376,23 @@ class MainClass{
       return;
     }
    
-    var v1= pacientes.Select(p=> new {
-      Nome = p.Nome, 
-      Gasto_Total = p.Valores.Sum()
-    });
-    
     /* var v1= pacientes.Select(p=> new {
       Nome = p.Nome, 
-      Gasto_Total = p.Consultas.Sum(vi=>vi.Custo)
+      Gasto_Total = p.Valores.Sum(v=>v*2)
     }); */
+    
+    var v1= pacientes.Select(p=> new {
+      Nome = p.Nome, 
+      Gasto_Total = p.Consultas.Sum(vi=>vi.Custo+vi.Custo)
+    });
 
     foreach(var obj in v1)Console.WriteLine(obj);
 
 
     Console.WriteLine();
-    var v2 = v1.GroupBy(obj=>obj.Nome, (key, valores) => new{
+    var v2 = v1.GroupBy(obj=>obj.Nome, (key, Gasto_Total) => new{
       Nome= key,
-      Tamanho_Lista= valores.Count()
+      Custos= Gasto_Total.Count()
     });
     foreach(var obj in v2)Console.WriteLine(obj);
    /*  foreach(Paciente p in pacientes) Console.WriteLine($"{p.Nome}\n"); */
@@ -432,7 +432,9 @@ class MainClass{
       return;
     }
     //-------------------------------------------------
-    ListarMed();
+    MedicosOP();
+    Console.WriteLine("Informe o ID do médico:");
+    int id = int.Parse(Console.ReadLine());
     Console.WriteLine("Informe um novo nome:");
     string nome = Console.ReadLine();
     Console.WriteLine("Informe um novo cpf:");
@@ -449,7 +451,7 @@ class MainClass{
       Console.WriteLine("Formato da data invalido");
     }
     Medico m = new Medico(nome,cpf,data);
-    NM.AtualizarMed(m);
+    NM.AtualizarMed(id,m);
   }
   public static void EditarPac(){
     Console.WriteLine("\n-------Editar Paciente-------");
@@ -554,8 +556,10 @@ class MainClass{
       Console.WriteLine("Formato da data inválido!");
     }
 
-    Console.WriteLine("Selecione um paciente:");
+    Console.WriteLine();
     PacientesOP();
+    Console.WriteLine("\nSelecione um paciente:");
+    
     int idPac = int.Parse(Console.ReadLine());
     Paciente p = NP.ProcurarPacID(idPac);
     string status = "Agendada";
@@ -596,7 +600,6 @@ class MainClass{
     string status = "Em processo.";
 
     Consulta c = new Consulta(p,desc,status);
-    c.Custo=15;
     
     NC.AgendarCnslt(c);
   }
@@ -728,8 +731,9 @@ class MainClass{
     string status = "Agendada";
     Consulta c = new Consulta(m,p,desc,status,data);
     
-    Console.WriteLine("Informe o custo");
-    c.Custo=int.Parse(Console.ReadLine());
+    Console.WriteLine("Informe o custo da consulta:");
+    int custo = int.Parse(Console.ReadLine());
+    c.Custo = custo;
     NC.AgendarCnslt(c);
   }
 
@@ -758,7 +762,7 @@ class MainClass{
   }
   public static void ConsultasOP(){
     Console.WriteLine("---Lista de Consultas---");
-    List<Consulta> consultas = NC.ListarConsultas();
+    var consultas = NC.ListarConsultas().Where(x=>x.Paciente != null).ToList();
     if(consultas.Count == 0){
       Console.WriteLine("Nenhuma consulta cadastrada.");
       return;
@@ -770,10 +774,11 @@ class MainClass{
 
   public static void ToXml(){
     try{
-      NC.Salvar();
+      
       NF.Salvar();
       NM.Salvar();
       NP.Salvar();
+      NC.Salvar();
       
     }catch(Exception erro){
       Console.WriteLine(erro.Message);

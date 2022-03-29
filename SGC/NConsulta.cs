@@ -16,22 +16,24 @@ class NConsulta{
   
   public void AgendarCnslt(Consulta c){
     int max=0;
-    /* foreach(Consulta obj in consultas)
+    foreach(Consulta obj in consultas)
       if(obj.Id>max)max=obj.Id;
-    c.Id=max+1; */
+    c.Id=max+1;
     
-    max = consultas.Max(obj=>obj.Id);
-    c.Id = max+1;
+    /* max = consultas.Max(obj=>obj.Id);
+    c.Id = max+1; */
+    
     Paciente p = c.Paciente;
     Medico m = c.Medico;
     
     if(p != null) p.InserirCnslt(c);
     if(m != null) m.InserirCnslt(c);
+    
     consultas.Add(c); 
   }
 
   public List<Consulta> ListarConsultas(){
-    consultas.Sort();
+   /*  consultas.Sort(); */
     return consultas;
   }
   
